@@ -18,12 +18,13 @@ import Account from "./pages/customer-view/account";
 
 import NotFound from "./pages/not-found";
 import CheckAuth from "./components/common/check-auth";
+import AccessDenied from "./pages/access-denied";
 
 
 function App() {
 
-  const isAuthenticated = true;
-  const user = {role : 'admin'};
+  const isAuthenticated = false;
+  const user = null;
 
   return (
     <div className="flex flex-col overflow-hidden bg-white">
@@ -64,6 +65,10 @@ function App() {
               <Route path="checkout" element={<Checkout/>}/>
               <Route path="account" element={<Account/>}/>
         </Route>
+
+        
+        {/* ==== AccessDenied ===== */}
+        <Route path="/access-denied" element = {<AccessDenied/>}/>
 
         {/* ==== NotFound ===== */}
         <Route path="*" element = {<NotFound/>}/>
