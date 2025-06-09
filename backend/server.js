@@ -4,6 +4,8 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import express from "express";
 
+import { authRouter } from "./routes/auth/auth-routes";
+
 dotenv.config()
 
 //create db connection
@@ -33,5 +35,6 @@ app.use(
 
 app.use(cookieParser())
 app.use(express.json())
+app.use('/api/auth',authRouter)
 
 app.listen(port, () => {console.log("Server is running on port ",port)})
