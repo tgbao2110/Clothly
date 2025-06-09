@@ -90,7 +90,7 @@ const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText})
         </div>
         
         {/* ===== Button ===== */}
-        <Button type='submit' className="mt-1">
+        <Button type='submit' className="mt-5 cursor-pointer">
             {buttonText || 'Submit'}
         </Button>
     </form>
