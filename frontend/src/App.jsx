@@ -11,6 +11,10 @@ import AdminOrders from "./pages/admin-view/orders";
 import AdminFeatures from "./pages/admin-view/features";
 
 import CustomerLayout from "./components/customer-view/layout";
+import Home from "./pages/customer-view/home";
+import Listing from "./pages/customer-view/listing";
+import Checkout from "./pages/customer-view/checkout";
+import Account from "./pages/customer-view/account";
 
 import NotFound from "./pages/not-found";
 
@@ -34,8 +38,13 @@ function App() {
           <Route path="features" element={<AdminFeatures/>}/>
         </Route>
 
-        {/* ==== Customer Route ===== */}
-        <Route path="/shop" element={<CustomerLayout/>}/>
+        {/* ==== Customer Routes ===== */}
+        <Route path="/shop" element={<CustomerLayout/>}>
+          <Route path="" element={<Home/>}/>
+          <Route path="listing" element={<Listing/>}/>
+          <Route path="checkout" element={<Checkout/>}/>
+          <Route path="account" element={<Account/>}/>
+        </Route>
 
         {/* ==== NotFound ===== */}
         <Route path="*" element = {<NotFound/>}/>
