@@ -109,10 +109,18 @@ const login = async(req, res) => {
 //
 //
 // Logout
-
+const logout = (req,res) => {
+    res
+    .clearCookie('token')
+    .status(200)
+    .json({
+        success:true,
+        message:'Logged out successfully'
+    })
+}
 //
 //
 //
 // Middleware
 
-export { register, login };
+export { register, login, logout };
