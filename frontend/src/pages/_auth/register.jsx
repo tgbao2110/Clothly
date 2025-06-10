@@ -21,18 +21,18 @@ const Register = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-
+    //
     // Dispatch thunk
     dispatch(registerUser(formData))
     .then((data) => {
       console.log(data?.payload?.message);
-
+      //
       // Handle success
       if(data?.payload?.success) {
         toast.success(data?.payload?.message);
         navigate('/auth/login');
       }
-
+      //
       // Handle server error
       else {
         toast.error(data?.payload?.message);
