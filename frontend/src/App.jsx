@@ -19,6 +19,7 @@ import Account from "./pages/customer-view/account";
 import NotFound from "./pages/not-found";
 import CheckAuth from "./components/common/check-auth";
 import AccessDenied from "./pages/access-denied";
+import { Toaster } from "sonner";
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
 
   return (
     <div className="flex flex-col overflow-hidden bg-white">
+      <Toaster/>
       <h1>Header</h1>
       <Routes>
         {/* ==== Auth Routes ===== */}

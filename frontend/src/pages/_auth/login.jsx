@@ -2,6 +2,7 @@ import CommonForm from "@/components/common/form"
 import { loginFormControls } from "@/config"
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import { toast } from "sonner"
 
 const initState = {
   userName: '',
@@ -12,7 +13,6 @@ const Login = () => {
   const [formData, setFormData] = useState(initState)
   const onSubmit = (e) => {
     e.preventDefault()
-    console.log ('SUBMITTING LOGIN....')
   }
   return (
     <div className="w-full max-w-md space-y-8">

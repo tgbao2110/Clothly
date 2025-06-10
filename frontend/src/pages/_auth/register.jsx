@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
+import { toast } from "sonner"
 
 import CommonForm from "@/components/common/form"
 import { registerFormControls } from "@/config"
@@ -23,7 +24,10 @@ const Register = () => {
     dispatch(registerUser(formData))
     .then((data) => {
       console.log(data?.payload?.message);
-      if(data?.payload?.success) navigate('/auth/login');
+      if(data?.payload?.success) {
+        toast.success(data?.payload?.message);
+        navigate('/auth/login');
+      };
     })
   }
   return (
