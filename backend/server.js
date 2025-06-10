@@ -4,7 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import express from "express";
 
-import { authRouter } from "./routes/auth/auth-routes";
+import { authRouter } from "./routes/auth/auth-routes.js";
 
 dotenv.config()
 
@@ -20,7 +20,7 @@ const port = process.env.PORT || "5001";
 //Middlewares
 app.use(
     cors({
-        origin: 'http://localhost:5173/',
+        origin: 'http://localhost:5173',
         methods: ['GET','POST',"PUT",'DELETE'],
         allowedHeaders: [
             'Content-Type',
