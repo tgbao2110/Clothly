@@ -2,7 +2,9 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
 import { User } from '../../models/Users.js';
-
+//
+//
+//
 // Register
 const register = async(req, res) => {
     const {userName, email, password} = req.body;
@@ -12,7 +14,7 @@ const register = async(req, res) => {
         const checkUser = await User.findOne({email});
         if(checkUser){
             console.error("Email existing")
-            res.json({
+            return res.status(401).json({
                 success: false,
                 message: 'Email already in use. Try loggin in'
             }) 
@@ -39,18 +41,21 @@ const register = async(req, res) => {
         }) 
     }
 }
-
-
+//
+//
+//
 // Login
 const login = async(req, res) => {
     const {email, password} = req.body;
+    console.log("Email: ", email)
+    console.log("Pw: ", password)
     try {
         //
         // Check if email exists
-        const checkUser = User.findOne({email});
+        const checkUser = await User.findOne({email});
         if (!checkUser) {
             console.error('Email not found');
-            res.json({
+            return res.status(401).json({
                 success: false,
                 message: 'Email not found. Try again or sign up'
             }) 
@@ -60,7 +65,7 @@ const login = async(req, res) => {
         const checkPassword = await bcrypt.compare(password, checkUser.password)
         if (!checkPassword) {
             console.error('Password incorrect');
-            res.json({
+            return res.status(401).json({
                 success: false,
                 message: 'Password incorrect. Please try again'
             })
@@ -100,10 +105,14 @@ const login = async(req, res) => {
     }
 }
 
-
+//
+//
+//
 // Logout
 
-
+//
+//
+//
 // Middleware
 
 export { register, login };
