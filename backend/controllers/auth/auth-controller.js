@@ -122,5 +122,28 @@ const logout = (req,res) => {
 //
 //
 // Middleware
+const authMiddleware = async (req,res,next) => {
+    //
+    // Get token from cookie
+    const token = req.cookies('token');
+    if(!token)
+        return res.status(401).json({
+            success:false,
+            message: 'Unauthorized user!'
+        })
+    //
+    //Decrypt token to get id, name, role
+    try {
+        const decoded = jwt.verify(token, 'CLIENT_SECRET_KEY');
+        req.user = decoded;
+        next(); // Express method
+    }
+    catch(error) {
+        return res.status(401).json({
+            success:false,
+            message: 'Unauthorized user!'
+        })
+    }
+}
 
-export { register, login, logout };
+export { register, login, logout, authMiddleware };
