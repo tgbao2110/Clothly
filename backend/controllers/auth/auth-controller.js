@@ -5,6 +5,13 @@ import { User } from '../../models/Users.js';
 const register = async(req, res) => {
     const {userName, email, password} = req.body;
     try {
+        const checkUser = await User.findOne({email});
+        if(checkUser){
+            res.json({
+            success:false,
+            message: 'This email is already taken'
+        }) 
+        }
         const hashedPassword = await bcrypt.hash(password, 12);
         const newUser = new User({
             userName, email, password: hashedPassword
@@ -15,17 +22,29 @@ const register = async(req, res) => {
             message:'User registered successfully!'
         })
     }
-    catch (e) {
-        console.error(e);
+    catch (error) {
+        console.error(error.message);
         res.status(500).json({
             success:false,
-            message: 'Error signing in: ' + e
+            message: 'Error signing up: ' + error
         }) 
     }
 }
 
 
 // Login
+const login = async(req, res) => {
+    const {email, password} = req.body;
+    try {
+        
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({
+            success:false,
+            message: 'Error signing in: ' + error
+        }) 
+    }
+}
 
 
 // Logout

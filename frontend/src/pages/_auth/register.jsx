@@ -21,21 +21,34 @@ const Register = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+
+    // Dispatch thunk
     dispatch(registerUser(formData))
     .then((data) => {
       console.log(data?.payload?.message);
+
+      // Handle success
       if(data?.payload?.success) {
         toast.success(data?.payload?.message);
         navigate('/auth/login');
+      }
+
+      // Handle server error
+      else {
+        toast.error(data?.payload?.message);
       };
     })
   }
+
   return (
     <div className="w-full max-w-md space-y-8">
+
+      {/* ==== Title & Link ==== */}
       <div className="text-center">
         <h1 className="text-3xl font-bold tracking-tight text-primary">
           Create a new account
         </h1>
+
         <p className="mt-2">
           Already have an account?
           <Link 
@@ -45,8 +58,9 @@ const Register = () => {
             Login
           </Link>
         </p>
-        
       </div>
+
+      {/* ====== Form ====== */}
       <CommonForm
         formControls={registerFormControls}
         formData={formData}
@@ -54,6 +68,7 @@ const Register = () => {
         onSubmit={onSubmit}
         buttonText={"Sign Up"}
       />
+
     </div>
   )
 }
