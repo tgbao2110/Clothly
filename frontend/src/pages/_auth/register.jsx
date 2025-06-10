@@ -14,28 +14,27 @@ const initState = {
 }
 
 const Register = () => {
-
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState(initState);
 
   const onSubmit = (e) => {
     e.preventDefault();
     //
-    // Dispatch thunk
+    // Dispatch register thunk
     dispatch(registerUser(formData))
-    .then((data) => {
-      console.log(data?.payload?.message);
+    .then((action) => {
+      console.log(action?.payload?.message);
       //
       // Handle success
-      if(data?.payload?.success) {
-        toast.success(data?.payload?.message);
+      if(action?.payload?.success) {
+        toast.success(action?.payload?.message);
         navigate('/auth/login');
       }
       //
       // Handle server error
       else {
-        toast.error(data?.payload?.message);
+        toast.error(action?.error?.message || 'Unexpected error');
       };
     })
   }

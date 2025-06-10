@@ -1,18 +1,41 @@
-import CommonForm from "@/components/common/form"
-import { loginFormControls } from "@/config"
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { Link, useNavigate } from "react-router-dom"
 import { toast } from "sonner"
 
+import CommonForm from "@/components/common/form"
+import { loginFormControls } from "@/config"
+import { loginUser } from "@/store/auth-slice"
+
 const initState = {
-  userName: '',
+  email: '',
   password: ''
 }
 
 const Login = () => {
-  const [formData, setFormData] = useState(initState)
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [formData, setFormData] = useState(initState);
+  const userState = useSelector(state=>state.auth)
+
   const onSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    //
+    // Dispatch login thunk
+    dispatch(loginUser(formData))
+    .then((action) => {
+      //
+      // Handle success
+      if(action?.payload?.success) {
+        toast.success(action?.payload?.message);
+        navigate('/shop');
+      }
+      //
+      // Handle server error
+      else {
+        toast.error(action?.payload?.message || 'Unexpected error');
+      };
+    })
   }
   return (
     <div className="w-full max-w-md space-y-8">
