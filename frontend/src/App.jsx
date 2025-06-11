@@ -1,4 +1,8 @@
+import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
+import AccessDenied from "./pages/access-denied";
+import { Toaster } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
 
 import AuthLayout from "./components/_auth/layout";
 import Login from "./pages/_auth/login";
@@ -18,14 +22,21 @@ import Account from "./pages/customer-view/account";
 
 import NotFound from "./pages/not-found";
 import CheckAuth from "./components/common/check-auth";
-import AccessDenied from "./pages/access-denied";
-import { Toaster } from "sonner";
+import { checkAuth } from "./store/auth-slice";
 
 
 function App() {
 
-  const isAuthenticated = false;
-  const user = null;
+  const dispatch = useDispatch()
+
+  // Get global state auth
+  const {user, isAuthenticated} = useSelector(state=>state.auth);
+  
+  // Dispatch checkAuth everytime re-rendered
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, []
+  );
 
   return (
     <div className="flex flex-col overflow-hidden bg-white">

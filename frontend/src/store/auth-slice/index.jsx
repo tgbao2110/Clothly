@@ -27,12 +27,32 @@ const loginUser = createAsyncThunk('/auth/login',
     async(formData, thunkAPI) => {
         try {
             const res = await api.post('/auth/login', formData, {
-            withCredentials: true
+                withCredentials: true
             })
+            console.log(res)
             return res.data
         }
         catch (error) {
           return thunkAPI.rejectWithValue(error.response?.data);
+        }
+    }
+)
+
+// Check auth thunk
+const checkAuth = createAsyncThunk('/auth/check-auth',
+    async(formData,thunkAPI) => {
+        try {
+            const res = await api.get('/auth/check-auth', {
+                withCredentials: true,
+                headers: {
+                    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+                }
+            })
+            return res.data
+        }
+        catch (error)
+        {
+            return thunkAPI.rejectWithValue(error.response?.data)
         }
     }
 )
@@ -72,9 +92,22 @@ const authSlice = createSlice({
             state.isAuthenticated = false;
             state.user = null;
         })
+        //
+        // CheckAuth states
+        builder.addCase(checkAuth.pending, state=>{
+            state.isLoading = true;
+        }).addCase(checkAuth.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.isAuthenticated = true;
+            state.user = action.payload.user;
+        }).addCase(checkAuth.rejected, state => {
+            state.isLoading = false;
+            state.isAuthenticated = false;
+            state.user = null;
+        })
     }
 })
 
 export const { setUser } = authSlice.actions;
-export { registerUser, loginUser }
+export { registerUser, loginUser, checkAuth }
 export default authSlice.reducer;
