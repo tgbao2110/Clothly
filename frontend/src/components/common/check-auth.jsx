@@ -22,7 +22,7 @@ const CheckAuth = ({ isAuthenticated, user, children }) => {
       location.pathname.includes("/register"))
   ) {
     if(user?.role === 'admin') return <Navigate to="admin/dashboard"/>
-    else return <Navigate to="/customer"/>
+    else return <Navigate to="/shop"/>
   }
 
   //

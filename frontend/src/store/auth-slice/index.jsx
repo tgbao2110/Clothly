@@ -3,7 +3,7 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 
 const initialState = {
     isAuthenticated: false,
-    isLoading: false,
+    isLoading: true,
     user: null
 }
 
@@ -38,7 +38,7 @@ const loginUser = createAsyncThunk('/auth/login',
     }
 )
 
-// Check auth thunk
+// Check auth thunk (validate session)
 const checkAuth = createAsyncThunk('/auth/check-auth',
     async(formData,thunkAPI) => {
         try {

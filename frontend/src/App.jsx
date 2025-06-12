@@ -30,18 +30,22 @@ function App() {
   const dispatch = useDispatch()
 
   // Get global state auth
-  const {user, isAuthenticated} = useSelector(state=>state.auth);
+  const {user, isAuthenticated, isLoading} = useSelector(state=>state.auth);
   
-  // Dispatch checkAuth everytime re-rendered
+  // Validate session every re-render
   useEffect(() => {
     dispatch(checkAuth());
   }, []
   );
 
+  // Loading
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
   return (
     <div className="flex flex-col overflow-hidden bg-white">
       <Toaster/>
-      <h1>Header</h1>
       <Routes>
         {/* ==== Auth Routes ===== */}
         <Route path="/auth" element={
