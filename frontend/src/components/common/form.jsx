@@ -1,7 +1,7 @@
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label"
-import { SelectTrigger, SelectValue, SelectContent, SelectItem } from "../ui/select";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 
 const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText}) => {
@@ -41,12 +41,12 @@ const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText})
                         <SelectContent>
                             {
                                 control &&
-                                control.length > 0 &&
-                                control.options.map(option => {
-                                    <SelectItem value = {option.id}>
+                                control.options.length > 0 &&
+                                control.options.map(option => (
+                                    <SelectItem key = {option.id} value ={option.id}>
                                         {option.label}
                                     </SelectItem>
-                                })
+                                ))
                             }
                         </SelectContent>
                     </Select>

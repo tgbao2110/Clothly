@@ -7,16 +7,16 @@ import CommonForm from "@/components/common/form"
 import { loginFormControls } from "@/config"
 import { loginUser } from "@/store/auth-slice"
 
-const initState = {
-  email: '',
-  password: ''
-}
+
 
 const Login = () => {
+  const initState = {
+    email: "",
+    password: "",
+  };
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState(initState);
-  const userState = useSelector(state=>state.auth)
 
   const onSubmit = (e) => {
     e.preventDefault();
