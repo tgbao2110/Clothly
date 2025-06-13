@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { createProductForm } from "@/config";
 import CommonForm from "@/components/common/form";
+import ProductImageUpload from "@/components/admin-view/image-upload";
 
 const AdminProducts = () => {
   const initState = {
@@ -14,8 +15,12 @@ const AdminProducts = () => {
     salePrice: 0,
     stockQuantity: 0
   }
-  const [openDialog, setOpenDialog] = useState(true);
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState('');
   const [formData, setFormData] = useState(initState);
+
   const handleCreate = () =>{
 
   }
@@ -41,6 +46,14 @@ const AdminProducts = () => {
             </SheetTitle>
           </SheetHeader>
 
+          {/* Image Upload */}
+          <ProductImageUpload
+            image = {image}
+            setImage = {setImage}
+            imageUrl = {imageUrl}
+            setImageUrl = {setImageUrl}
+          />
+
           {/* Dialog Form */}
           <div className="px-5">
             <CommonForm
@@ -53,7 +66,7 @@ const AdminProducts = () => {
           </div>
         </SheetContent>
       </Sheet>
-
+      
       {/* ==== Products List ==== */}
       <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
         <div>Item</div>
