@@ -57,6 +57,8 @@ const checkAuth = createAsyncThunk('/auth/check-auth',
     }
 )
 
+
+///// Slice /////
 const authSlice = createSlice({
     name:'auth',
     initialState,
@@ -73,7 +75,7 @@ const authSlice = createSlice({
         }).addCase(registerUser.fulfilled, (state, action) => {
             state.isLoading = false;
             state.isAuthenticated = false;
-            state.user = null;
+            state.user = action.payload.data;
         }).addCase(registerUser.rejected, state => {
             state.isLoading = false;
             state.isAuthenticated = false;

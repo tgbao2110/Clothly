@@ -1,11 +1,18 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
+import { toast } from "sonner";
+
 import { createProductForm } from "@/config";
 import CommonForm from "@/components/common/form";
 import ProductImageUpload from "@/components/admin-view/image-upload";
+import { createProduct } from "@/store/admin-slices/products-slice";
 
 const AdminProducts = () => {
+  const dispatch = useDispatch()
+
   const initState = {
     title: '',
     description: '',
@@ -23,8 +30,24 @@ const AdminProducts = () => {
   const [formData, setFormData] = useState(initState);
 
 
-  const handleCreate = () =>{
-
+  const handleCreate = e =>{
+    e.preventDefault();
+    
+    dispatch(createProduct(formData))
+    .then((action) => {
+      console.log(action?.payload?.message);
+      //
+      // Handle success
+      if(action?.payload?.success) {
+        console.log("Created product: ", action?.payload?.data);
+        toast.success(action?.payload?.message);
+      }
+      //
+      // Handle error
+      else {
+        toast.error(action?.payload?.message);
+      }
+    })
   }
 
   return (
