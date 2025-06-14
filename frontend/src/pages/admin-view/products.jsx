@@ -13,7 +13,7 @@ const AdminProducts = () => {
     brand: 'nike',
     price: 0,
     salePrice: 0,
-    stockQuantity: 0,
+    stock: 0,
     image: null
   }
 

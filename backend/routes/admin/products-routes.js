@@ -1,9 +1,20 @@
 import express from "express";
-import { handleImageUpload } from "../../controllers/admin/products-controller.js";
 import { upload } from "../../helpers/cloudinary.js";
+import {
+  handleImageUpload,
+  createProduct,
+  getAllProducts,
+  updateProduct,
+  deleteProduct,
+} from "../../controllers/admin/products-controller.js";
 
 const router = express.Router();
 
 router.post('/upload-image', upload.single('my-file'), handleImageUpload)
+router.post('/', createProduct)
+router.get('/', getAllProducts)
+router.put('/:id', updateProduct)
+router.delete('/:id', deleteProduct)
+
 
 export {router as adminProductsRouter}

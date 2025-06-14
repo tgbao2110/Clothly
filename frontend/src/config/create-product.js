@@ -52,7 +52,7 @@ export const createProductForm = [
     },
     {
         label:'Stock Quantity',
-        name: 'stockQuantity',
+        name: 'stock',
         componentType: 'input',
         type: 'number',
         placeholder: 'Enter stock quantity'
