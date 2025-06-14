@@ -26,12 +26,12 @@ const handleImageUpload = async(req, res) => {
 // CREATE
 const createProduct = async(req, res) => {
     try {
-        const newPoduct = new Product(req.body);
+        const newProduct = new Product(req.body);
         await newProduct.save();
 
         res.status(201).json({
             success: true,
-            data: newPoduct,
+            data: newProduct,
             message: "Product added successfully"
         })
     } catch (error) {
