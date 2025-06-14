@@ -1,12 +1,13 @@
+import { useEffect, useState } from "react";
+
 import { CloudUpload, File, XIcon } from "lucide-react";
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
-import { useEffect, useState } from "react";
-import api from "@/lib/api";
 
-const ProductImageUpload = ({ image, setImage, imageUrl, setImageUrl }) => {
+const ProductImageUpload = ({ image, setImage }) => {
 
     const [isDraggingOver, setIsDraggingOver] = useState(false);
+    const [previewUrl, setPreviewUrl] = useState("");
 
     const handleDragOver = e => {
         setIsDraggingOver (true);
@@ -34,17 +35,19 @@ const ProductImageUpload = ({ image, setImage, imageUrl, setImageUrl }) => {
         setImage(null);
     }
 
-    const uploadImgToCloudinary = async () => {
-        const data = new FormData();
-        data.append('my-file', image);
-        const res = await api.post('/admin/products/upload-image');
-        console.log('Image Data: ', res.data);
-        if (res?.data?.success) setImageUrl(res.data,result.url);
-    }
-
+    // Create or remove preview url when image change
     useEffect(() => {
-        if(image !== null) uploadImgToCloudinary()
-    }, [image])
+        if (image) {
+            const blob = URL.createObjectURL(image);
+            setPreviewUrl(blob);
+            return () => {
+                URL.revokeObjectURL(blob);
+            };
+        } else {
+            setPreviewUrl("");
+        }   
+    }, [image]);
+
 
 
   return (
@@ -52,7 +55,7 @@ const ProductImageUpload = ({ image, setImage, imageUrl, setImageUrl }) => {
       {/* ==== Label ==== */}
       <Label className="mb-2">Upload Image</Label>
 
-      <div onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
+      <div>
         {/* ==== Input ==== */}
         <Input 
             id="image" 
@@ -65,39 +68,51 @@ const ProductImageUpload = ({ image, setImage, imageUrl, setImageUrl }) => {
         {   
             image ? 
             /* If img uploaded then show preview  */
-            <div className="flex justify-between items-center p-4 mt-4
-                text-muted-foreground
-                border-2 rounded-lg"
-            >
-                <div className="flex items-center">
-                    <File className="mr-2"/>
+            (
+                <div className="flex-col gap-2">
+                    <div className="flex justify-between items-center p-4 mt-4
+                        text-muted-foreground
+                        border-2 rounded-lg"
+                    >
+                        <div className="flex items-center">
+                            <File className="mr-2"/>
+                        </div>
+                        <p>
+                            {image.name}
+                        </p>
+                        <XIcon 
+                            className="text-muted-foreground hover:text-foreground w-4 h-4"
+                            onClick={handleRemoveImage}
+                        />
+                    </div>
+                    <img
+                        src={URL.createObjectURL(image)}
+                        alt="Preview"
+                        className="mt-2 w-full rounded-md max-h-100 object-contain"
+                    />
                 </div>
-                <p>
-                    {image.name}
-                </p>
-                <XIcon 
-                    className="text-muted-foreground hover:text-foreground w-4 h-4"
-                    onClick={handleRemoveImage}
-                />
-            </div> 
+            ) 
             :
             /* Else show drag & drop  */
-            <Label 
-                htmlFor = 'image'
-                className={`flex flex-col items-center justify-center h-32 mt-4 cursor-pointer
-                text-muted-foreground
-                border-2 border-dashed rounded-lg
-                ${isDraggingOver ? 'bg-accent' : 'bg-background'}`}
-            >
-                <CloudUpload/>
-                <span>
-                    {
-                        isDraggingOver ?
-                        'Drop here' :
-                        'Drag & drop or click to upload'
-                    }
-                </span>
-            </Label>
+            (
+                <Label 
+                    htmlFor = 'image'
+                    className={`flex flex-col items-center justify-center h-32 mt-4 cursor-pointer
+                    text-muted-foreground
+                    border-2 border-dashed rounded-lg
+                    ${isDraggingOver ? 'bg-accent' : 'bg-background'}`}
+                    onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}
+                >
+                    <CloudUpload/>
+                    <span>
+                        {
+                            isDraggingOver ?
+                            'Drop here' :
+                            'Drag & drop or click to upload'
+                        }
+                    </span>
+                </Label>
+            )
         }
       </div>
     </div>
