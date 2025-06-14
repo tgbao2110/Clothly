@@ -13,13 +13,15 @@ const AdminProducts = () => {
     brand: 'nike',
     price: 0,
     salePrice: 0,
-    stockQuantity: 0
+    stockQuantity: 0,
+    image: null
   }
 
   const [openDialog, setOpenDialog] = useState(false);
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
   const [formData, setFormData] = useState(initState);
+
 
   const handleCreate = () =>{
 
@@ -38,7 +40,7 @@ const AdminProducts = () => {
 
       {/* ==== Add Procut Dialog ==== */}
       <Sheet open={openDialog} onOpenChange={setOpenDialog}>
-        <SheetContent>
+        <SheetContent className='overflow-y-auto mb-5'>
           {/* Dialog Header */}
           <SheetHeader className='border-b'>
             <SheetTitle>

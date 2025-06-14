@@ -1,7 +1,8 @@
 import { CloudUpload, File, XIcon } from "lucide-react";
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import api from "@/lib/api";
 
 const ProductImageUpload = ({ image, setImage, imageUrl, setImageUrl }) => {
 
@@ -32,6 +33,18 @@ const ProductImageUpload = ({ image, setImage, imageUrl, setImageUrl }) => {
     const handleRemoveImage = () => {
         setImage(null);
     }
+
+    const uploadImgToCloudinary = async () => {
+        const data = new FormData();
+        data.append('my-file', image);
+        const res = await api.post('/admin/products/upload-image');
+        console.log('Image Data: ', res.data);
+        if (res?.data?.success) setImageUrl(res.data,result.url);
+    }
+
+    useEffect(() => {
+        if(image !== null) uploadImgToCloudinary()
+    }, [image])
 
 
   return (
