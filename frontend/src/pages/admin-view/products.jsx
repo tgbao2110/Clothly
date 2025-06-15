@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { createProductForm } from "@/config"; 
 import CommonForm from "@/components/common/form";
 import ProductImageUpload from "@/components/admin-view/image-upload";
-import { createProduct, getAllProducts, uploadImage } from "@/store/admin-slices/products-slice";
+import { createProduct, getAllProducts, updateProduct, uploadImage } from "@/store/admin-slices/products-slice";
 import { Skeleton } from "@/components/ui/skeleton";
 import AdminProductTile from "@/components/admin-view/product-tile";
 
@@ -52,7 +52,7 @@ const AdminProducts = () => {
       // Handle success
       if(action?.payload?.success) {
         console.log("Created product: ", action?.payload?.data);
-        setOpenDialog(false);
+        handleSheetToggle(false);
         toast.success(action?.payload?.message);
       }
       //
@@ -63,12 +63,33 @@ const AdminProducts = () => {
     })
   }
 
+  // Dispatch POST updateProdcut
+  const handleUpdate = async e => {
+    e.preventDefault();
+    dispatch(updateProduct({id: currentEditId, formData}))
+    .then((action) => {
+      console.log (action.payload.message);
+      //
+      // Handle success
+      if (action?.payload?.success) {
+        toast.success(action?.payload?.message);
+        handleSheetToggle(false);
+        handleGetAll();
+      }
+      //
+      // Handle error
+      else {
+        toast.error(action?.payload?.message);
+      }
+    })
+  }
+
+  const handleGetAll = async() => {
+    dispatch(getAllProducts())
+  }
   // Dispatch GET getAllProducts
   useEffect(() => {
-    dispatch(getAllProducts())
-    .then((action) => {
-      console.log(action);
-    })
+    handleGetAll()
   }, [])
 
   // Handle close sheet
@@ -97,7 +118,9 @@ const AdminProducts = () => {
         <SheetContent className="overflow-y-auto pb-5">
           {/* Dialog Header */}
           <SheetHeader className="border-b">
-            <SheetTitle>Add New Product</SheetTitle>
+            <SheetTitle>
+              {!currentEditId ? 'Add New Product' : 'Edit Product'}
+            </SheetTitle>
           </SheetHeader>
 
           {isLoading ? (
@@ -121,8 +144,8 @@ const AdminProducts = () => {
                   formControls={createProductForm}
                   formData={formData}
                   setFormData={setFormData}
-                  onSubmit={handleCreate}
-                  buttonText="Add Product"
+                  onSubmit={!currentEditId ? handleCreate : handleUpdate}
+                  buttonText={!currentEditId ? 'Add Product' : 'Update Product'}
                 />
               </div>
             </>

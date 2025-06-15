@@ -67,7 +67,6 @@ const getAllProducts = async(req, res) => {
 // GET BY ID
 const getProductById = async(req, res) => {
     try {
-
         res.status(200).json({
             success: true,
             message: "Product fetched successfully"
@@ -91,7 +90,7 @@ const updateProduct = async(req, res) => {
 
         if (!foundProduct)
         {
-            res.status(404).json({
+            return res.status(404).json({
                 success: false,
                 message: "Product not found"
             })

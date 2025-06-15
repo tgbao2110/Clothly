@@ -40,16 +40,31 @@ const createProduct = createAsyncThunk('/products/create',
 
 // GET GetAllProducts thunk
 const getAllProducts = createAsyncThunk('/products/get-all',
-    async (_, thunkAPI) => {
-        try {
-            const res = await api.get("/admin/product/");
-            return res.data;
-        } catch (error) {
-            return thunkAPI.rejectWithValue(error.response?.data);
-        }
-    }
+  async (_, thunkAPI) => {
+      try {
+          const res = await api.get("/admin/product/");
+          return res.data;
+      } catch (error) {
+          return thunkAPI.rejectWithValue(error.response?.data);
+      }
+  }
 )
 
+// POST UpdateProduct thunk
+const updateProduct = createAsyncThunk('product/update',
+  async ({id, formData}, thunkAPI) => {
+    try {
+      const res = await api.put(`/admin/product/${id}`, formData, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data);
+    }
+  }
+)
 
 ///// Slice /////
 const AdminProductSlices = createSlice({
@@ -77,8 +92,18 @@ const AdminProductSlices = createSlice({
         builder.addCase(getAllProducts.fulfilled, (state, action) => {
           state.products = action.payload.data
         })
+        //
+        // Update states
+        builder.addCase(updateProduct.pending, (state) => {
+          state.isLoading = true;
+        }).addCase(updateProduct.fulfilled, (state, action) => {
+          state.isLoading = false;
+          console.log(action.payload.data)
+        }).addCase(updateProduct.rejected, (state) => {
+          state.isLoading = false;
+        })
     }
 })
 
-export { uploadImage, createProduct, getAllProducts }
+export { uploadImage, createProduct, getAllProducts, updateProduct }
 export default AdminProductSlices.reducer
