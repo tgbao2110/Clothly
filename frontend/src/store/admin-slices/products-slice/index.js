@@ -38,6 +38,18 @@ const createProduct = createAsyncThunk('/products/create',
     }
 )
 
+// GET GetAllProducts thunk
+const getAllProducts = createAsyncThunk('/products/get-all',
+    async (_, thunkAPI) => {
+        try {
+            const res = await api.get("/admin/product/");
+            return res.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response?.data);
+        }
+    }
+)
+
 
 ///// Slice /////
 const AdminProductSlices = createSlice({
@@ -60,8 +72,13 @@ const AdminProductSlices = createSlice({
         builder.addCase(uploadImage.pending, (state) => {
             state.isLoading = true;
           })
+        //
+        // GetAll states
+        builder.addCase(getAllProducts.fulfilled, (state, action) => {
+          state.products = action.payload.data
+        })
     }
 })
 
-export { uploadImage, createProduct }
+export { uploadImage, createProduct, getAllProducts }
 export default AdminProductSlices.reducer

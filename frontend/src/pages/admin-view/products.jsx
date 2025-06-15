@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Button } from "@/components/ui/button"
@@ -8,13 +8,15 @@ import { toast } from "sonner";
 import { createProductForm } from "@/config"; 
 import CommonForm from "@/components/common/form";
 import ProductImageUpload from "@/components/admin-view/image-upload";
-import { createProduct, uploadImage } from "@/store/admin-slices/products-slice";
+import { createProduct, getAllProducts, uploadImage } from "@/store/admin-slices/products-slice";
 import { Skeleton } from "@/components/ui/skeleton";
+import AdminProductTile from "@/components/admin-view/product-tile";
 
 
 const AdminProducts = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector(state => state.adminProducts.isLoading);
+  const products = useSelector(state => state.adminProducts.products);
 
   const initState = {
     title: '',
@@ -38,11 +40,11 @@ const AdminProducts = () => {
     // Dispatch POST UploadImage
     // unwrap: if success → return action.payload
     const uploadRes = await dispatch(uploadImage(image)).unwrap();
-    
-    setImageUrl(uploadRes?.result?.url);
-    const finalData = {...formData, image: imageUrl};
+    const finalImgUrl = uploadRes?.result?.url;
+    const finalData = {...formData, image: finalImgUrl};
+    setImageUrl(finalImgUrl)
 
-    // Dispatch POST CreateProduct
+    // Dispatch POST createProduct
     dispatch(createProduct(finalData))
     .then((action) => {
       console.log(action?.payload?.message);
@@ -60,6 +62,14 @@ const AdminProducts = () => {
       }
     })
   }
+
+  // Dispatch GET getAllProducts
+  useEffect(() => {
+    dispatch(getAllProducts())
+    .then((action) => {
+      console.log(action);
+    })
+  }, [])
 
   return (
     <div className="w-full">
@@ -114,11 +124,11 @@ const AdminProducts = () => {
       
       {/* ==== Products List ==== */}
       <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
-        <div>Item</div>
-        <div>Item</div>
-        <div>Item</div>
-        <div>Item</div>
-        <div>Item</div>
+        {
+          products.map(product => (
+            <AdminProductTile product={product}/>
+          ))
+        }
       </div>
     </div>
   )
