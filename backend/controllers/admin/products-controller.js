@@ -1,4 +1,4 @@
-import { imageUploadUtil } from '../../helpers/cloudinary.js'
+import { imageUploadUtil, imageDeleteUtil } from '../../helpers/cloudinary.js'
 import { Product } from '../../models/Product.js';
 //
 //
@@ -94,6 +94,13 @@ const updateProduct = async(req, res) => {
                 success: false,
                 message: "Product not found"
             })
+        }
+
+        // Delete image on cloudinary
+        if (updatedProduct.image && (updatedProduct.image !== foundProduct.image))
+        {
+            console.log('deleting ', foundProduct.image);
+            await imageDeleteUtil(foundProduct.image);
         }
 
         // For each product in updatedProduct, assign value to foundProduct
