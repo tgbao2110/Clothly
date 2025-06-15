@@ -66,7 +66,14 @@ const AdminProducts = () => {
   // Dispatch POST updateProdcut
   const handleUpdate = async e => {
     e.preventDefault();
-    dispatch(updateProduct({id: currentEditId, formData}))
+    
+    const uploadRes = await dispatch(uploadImage(image)).unwrap();
+    const finalImgUrl = uploadRes?.result?.url;
+    const finalData = {...formData, image: finalImgUrl};
+
+    console.log('Update product to: ', finalData);  
+
+    dispatch(updateProduct({id: currentEditId, formData: finalData}))
     .then((action) => {
       console.log (action.payload.message);
       //
@@ -74,7 +81,6 @@ const AdminProducts = () => {
       if (action?.payload?.success) {
         toast.success(action?.payload?.message);
         handleSheetToggle(false);
-        handleGetAll();
       }
       //
       // Handle error
@@ -84,12 +90,9 @@ const AdminProducts = () => {
     })
   }
 
-  const handleGetAll = async() => {
-    dispatch(getAllProducts())
-  }
   // Dispatch GET getAllProducts
   useEffect(() => {
-    handleGetAll()
+    dispatch(getAllProducts())
   }, [])
 
   // Handle close sheet
@@ -155,8 +158,9 @@ const AdminProducts = () => {
 
       {/* ==== Products List ==== */}
       <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {products.map((product) => (
+        {products.map((product, i) => (
           <AdminProductTile
+            key={i}
             product={product}
             setId={setCurrentEditId}
             setFormData={setFormData}

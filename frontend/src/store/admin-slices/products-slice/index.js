@@ -66,6 +66,7 @@ const updateProduct = createAsyncThunk('product/update',
   }
 )
 
+
 ///// Slice /////
 const AdminProductSlices = createSlice({
     name: 'adminProducts',
@@ -98,12 +99,13 @@ const AdminProductSlices = createSlice({
           state.isLoading = true;
         }).addCase(updateProduct.fulfilled, (state, action) => {
           state.isLoading = false;
-          console.log(action.payload.data)
+          const i = state.products.findIndex(p => p._id === action.payload.data._id)
+          if (i !== -1) state.products[i] = action.payload.data
         }).addCase(updateProduct.rejected, (state) => {
           state.isLoading = false;
         })
     }
 })
 
-export { uploadImage, createProduct, getAllProducts, updateProduct }
+export { uploadImage, createProduct, getAllProducts, updateProduct}
 export default AdminProductSlices.reducer

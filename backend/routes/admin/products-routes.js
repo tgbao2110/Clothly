@@ -13,7 +13,7 @@ const router = express.Router();
 router.post('/upload-image', upload.single('my-file'), handleImageUpload)
 router.post('/', createProduct)
 router.get('/', getAllProducts)
-router.put('/:id', updateProduct)
+router.put('/:id', upload.none(), updateProduct)
 router.delete('/:id', deleteProduct)
 
 
