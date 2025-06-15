@@ -2,7 +2,12 @@ import { Pencil, Trash2 } from "lucide-react"
 import { Button } from "../ui/button"
 import { Card, CardContent, CardFooter } from "../ui/card"
 
-const AdminProductTile = ({product}) => {
+const AdminProductTile = ({product, setId, setFormData, setOpenDialog}) => {
+    const handleEdit = () => {
+        setOpenDialog(true);
+        setId(product?._id);
+        setFormData(product);
+    }
   return (
     <Card className="w-full max-w-sm mx-auto pt-0">
       <div>
@@ -55,6 +60,7 @@ const AdminProductTile = ({product}) => {
               strokeWidth={1.75}
               title="Edit"
               className="text-muted-foreground hover:text-accent-foreground cursor-pointer"
+              onClick= {handleEdit}
             />
             <Trash2
               size={20}

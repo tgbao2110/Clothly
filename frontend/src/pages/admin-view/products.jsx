@@ -31,8 +31,9 @@ const AdminProducts = () => {
 
   const [openDialog, setOpenDialog] = useState(false);
   const [image, setImage] = useState(null);
-  const [imageUrl, setImageUrl] = useState("");
+  const [previewUrl, setPreviewUrl] = useState("");
   const [formData, setFormData] = useState(initState);
+  const [currentEditId, setCurrentEditId] = useState(null);
 
   const handleCreate = async e => {
     e.preventDefault();
@@ -42,7 +43,6 @@ const AdminProducts = () => {
     const uploadRes = await dispatch(uploadImage(image)).unwrap();
     const finalImgUrl = uploadRes?.result?.url;
     const finalData = {...formData, image: finalImgUrl};
-    setImageUrl(finalImgUrl)
 
     // Dispatch POST createProduct
     dispatch(createProduct(finalData))
@@ -71,66 +71,77 @@ const AdminProducts = () => {
     })
   }, [])
 
+  // Handle close sheet
+  const handleSheetToggle = (isOpen) => {
+  setOpenDialog(isOpen);
+
+  if (!isOpen) {
+    // Reset all states
+    setImage(null);
+    setPreviewUrl(null);
+    setFormData(initState);
+    setCurrentEditId(null);
+  }
+};
+
+
   return (
     <div className="w-full">
       {/* ==== Add Button ==== */}
       <div className="flex justify-end">
-        <Button
-          onClick={() => setOpenDialog(true)}
-        >
-          + Add product
-        </Button>
+        <Button onClick={() => setOpenDialog(true)}>+ Add product</Button>
       </div>
 
       {/* ==== Add Procut Dialog ==== */}
-      <Sheet open={openDialog} onOpenChange={setOpenDialog}>
-        <SheetContent className='overflow-y-auto pb-5'>
+      <Sheet open={openDialog} onOpenChange={handleSheetToggle}>
+        <SheetContent className="overflow-y-auto pb-5">
           {/* Dialog Header */}
-          <SheetHeader className='border-b'>
-            <SheetTitle>
-              Add New Product
-            </SheetTitle>
+          <SheetHeader className="border-b">
+            <SheetTitle>Add New Product</SheetTitle>
           </SheetHeader>
 
-          {
-            isLoading ?
+          {isLoading ? (
             <div className="flex justify-center items-center w-full h-full p-5">
               <Skeleton className="h-full w-full rounded-md" />
             </div>
-            :
+          ) : (
             <>
-            {/* Image Upload */}
-            <ProductImageUpload
-              image = {image}
-              setImage = {setImage}
-              imageUrl = {imageUrl}
-              setImageUrl = {setImageUrl}
-            />
-
-            {/* Dialog Form */}
-            <div className="px-5">
-              <CommonForm
-                formControls={createProductForm}
-                formData={formData}
-                setFormData={setFormData}
-                onSubmit={handleCreate}
-                buttonText="Add Product"
+              {/* Image Upload */}
+              <ProductImageUpload
+                image={image}
+                setImage={setImage}
+                previewUrl={previewUrl}
+                setPreviewUrl={setPreviewUrl}
+                productId={currentEditId}
               />
-            </div>
+
+              {/* Dialog Form */}
+              <div className="px-5">
+                <CommonForm
+                  formControls={createProductForm}
+                  formData={formData}
+                  setFormData={setFormData}
+                  onSubmit={handleCreate}
+                  buttonText="Add Product"
+                />
+              </div>
             </>
-          }
+          )}
         </SheetContent>
       </Sheet>
-      
+
       {/* ==== Products List ==== */}
       <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {
-          products.map(product => (
-            <AdminProductTile product={product}/>
-          ))
-        }
+        {products.map((product) => (
+          <AdminProductTile
+            product={product}
+            setId={setCurrentEditId}
+            setFormData={setFormData}
+            setOpenDialog={setOpenDialog}
+          />
+        ))}
       </div>
     </div>
-  )
+  );
 }
 export default AdminProducts

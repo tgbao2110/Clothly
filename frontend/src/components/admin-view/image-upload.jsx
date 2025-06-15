@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import { CloudUpload, File, XIcon } from "lucide-react";
 import { Input } from "../ui/input"
 import { Label } from "../ui/label"
+import { useSelector } from "react-redux";
 
-const ProductImageUpload = ({ image, setImage }) => {
+const ProductImageUpload = ({ image, setImage, previewUrl, setPreviewUrl, productId }) => {
 
+    const products = useSelector(state => state.adminProducts.products)
     const [isDraggingOver, setIsDraggingOver] = useState(false);
-    const [previewUrl, setPreviewUrl] = useState("");
+    
 
     const handleDragOver = e => {
         setIsDraggingOver (true);
@@ -33,20 +35,24 @@ const ProductImageUpload = ({ image, setImage }) => {
 
     const handleRemoveImage = () => {
         setImage(null);
+        setPreviewUrl(null);
     }
 
-    // Create or remove preview url when image change
     useEffect(() => {
-        if (image) {
-            const blob = URL.createObjectURL(image);
-            setPreviewUrl(blob);
-            return () => {
-                URL.revokeObjectURL(blob);
-            };
-        } else {
-            setPreviewUrl("");
-        }   
-    }, [image]);
+      if (image) {
+        const blob = URL.createObjectURL(image);
+        setPreviewUrl(blob);
+        return () => URL.revokeObjectURL(blob);
+      }
+
+      if (productId) {
+        const found = products.find((p) => p._id === productId);
+        if (found?.image) setPreviewUrl(found.image);
+        else setPreviewUrl(null);
+      } else {
+        setPreviewUrl(null);
+      }
+    }, [image, productId, products]);
 
 
 
@@ -66,7 +72,7 @@ const ProductImageUpload = ({ image, setImage }) => {
 
         {/* ==== Image Preview & DragnDrop Label ==== */}
         {   
-            image ? 
+            (image || previewUrl) ? 
             /* If img uploaded then show preview  */
             (
                 <div className="flex-col gap-2">
@@ -78,7 +84,7 @@ const ProductImageUpload = ({ image, setImage }) => {
                             <File className="mr-2"/>
                         </div>
                         <p>
-                            {image.name}
+                            {image?.name}
                         </p>
                         <XIcon 
                             className="text-muted-foreground hover:text-foreground w-4 h-4"
@@ -86,7 +92,7 @@ const ProductImageUpload = ({ image, setImage }) => {
                         />
                     </div>
                     <img
-                        src={URL.createObjectURL(image)}
+                        src={previewUrl || 'preview.png'}
                         alt="Preview"
                         className="mt-2 w-full rounded-md max-h-100 object-contain"
                     />
