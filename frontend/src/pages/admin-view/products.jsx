@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
+import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { toast } from "sonner";
 
 import { createProductForm } from "@/config"; 
 import CommonForm from "@/components/common/form";
 import ProductImageUpload from "@/components/admin-view/image-upload";
-import { createProduct, getAllProducts, updateProduct, uploadImage } from "@/store/admin-slices/products-slice";
-import { Skeleton } from "@/components/ui/skeleton";
+import { createProduct, deleteProduct, getAllProducts, updateProduct, uploadImage } from "@/store/admin-slices/products-slice";
 import AdminProductTile from "@/components/admin-view/product-tile";
 
 
@@ -29,18 +30,27 @@ const AdminProducts = () => {
     image: ''
   }
 
-  const [openDialog, setOpenDialog] = useState(false);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [image, setImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState("");
   const [formData, setFormData] = useState(initState);
-  const [currentEditId, setCurrentEditId] = useState(null);
+  const [currentId, setCurrentId] = useState(null);
+
 
   const handleCreate = async e => {
     e.preventDefault();
-
+    
+    let uploadRes;
     // Dispatch POST UploadImage
     // unwrap: if success → return action.payload
-    const uploadRes = await dispatch(uploadImage(image)).unwrap();
+    try {
+      uploadRes = await dispatch(uploadImage(image)).unwrap();
+    } catch (error) {
+      toast.error("Please select an image");
+      return null
+    }
+
     const finalImgUrl = uploadRes?.result?.url;
     const finalData = {...formData, image: finalImgUrl};
 
@@ -73,7 +83,7 @@ const AdminProducts = () => {
 
     console.log('Update product to: ', finalData);  
 
-    dispatch(updateProduct({id: currentEditId, formData: finalData}))
+    dispatch(updateProduct({id: currentId, formData: finalData}))
     .then((action) => {
       console.log (action.payload.message);
       //
@@ -90,6 +100,23 @@ const AdminProducts = () => {
     })
   }
 
+  // Dispatch DELETE deleteProdcut
+  const handleDelete = async e => {
+    e.preventDefault();
+
+    dispatch(deleteProduct(currentId))
+      .then(action => {
+        console.log(action?.payload);
+        if(action?.payload?.success)
+        {
+          setIsConfirmDialogOpen(false);
+          toast.success(action?.payload?.message);
+        }
+        else
+          toast.error(action?.payload?.message)
+      })
+  }
+
   // Dispatch GET getAllProducts
   useEffect(() => {
     dispatch(getAllProducts())
@@ -97,14 +124,14 @@ const AdminProducts = () => {
 
   // Handle close sheet
   const handleSheetToggle = (isOpen) => {
-  setOpenDialog(isOpen);
+  setIsCreateDialogOpen(isOpen);
 
   if (!isOpen) {
     // Reset all states
     setImage(null);
     setPreviewUrl(null);
     setFormData(initState);
-    setCurrentEditId(null);
+    setCurrentId(null);
   }
 };
 
@@ -113,16 +140,16 @@ const AdminProducts = () => {
     <div className="w-full">
       {/* ==== Add Button ==== */}
       <div className="flex justify-end">
-        <Button onClick={() => setOpenDialog(true)}>+ Add product</Button>
+        <Button onClick={() => setIsCreateDialogOpen(true)}>+ Add product</Button>
       </div>
 
       {/* ==== Add Procut Dialog ==== */}
-      <Sheet open={openDialog} onOpenChange={handleSheetToggle}>
+      <Sheet open={isCreateDialogOpen} onOpenChange={handleSheetToggle}>
         <SheetContent className="overflow-y-auto pb-5">
           {/* Dialog Header */}
           <SheetHeader className="border-b">
             <SheetTitle>
-              {!currentEditId ? 'Add New Product' : 'Edit Product'}
+              {!currentId ? 'Add New Product' : 'Edit Product'}
             </SheetTitle>
           </SheetHeader>
 
@@ -138,7 +165,7 @@ const AdminProducts = () => {
                 setImage={setImage}
                 previewUrl={previewUrl}
                 setPreviewUrl={setPreviewUrl}
-                productId={currentEditId}
+                productId={currentId}
               />
 
               {/* Dialog Form */}
@@ -147,8 +174,8 @@ const AdminProducts = () => {
                   formControls={createProductForm}
                   formData={formData}
                   setFormData={setFormData}
-                  onSubmit={!currentEditId ? handleCreate : handleUpdate}
-                  buttonText={!currentEditId ? 'Add Product' : 'Update Product'}
+                  onSubmit={!currentId ? handleCreate : handleUpdate}
+                  buttonText={!currentId ? 'Add Product' : 'Update Product'}
                 />
               </div>
             </>
@@ -156,15 +183,40 @@ const AdminProducts = () => {
         </SheetContent>
       </Sheet>
 
+      {/* ==== Delete Confirmation Dialog ==== */}
+      <Dialog open={isConfirmDialogOpen} onOpenChange={setIsConfirmDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Delete this product permanently?</DialogTitle>
+              <DialogDescription>This action cannot be undone</DialogDescription>
+            </DialogHeader>
+            <DialogFooter className='flex flex-row justify-end'>
+              <Button 
+                variant='secondary'
+                onClick={() => setIsConfirmDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button 
+                variant='destructive'
+                onClick = {handleDelete}
+              >
+                Delete
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+      </Dialog>
+
       {/* ==== Products List ==== */}
       <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
         {products.map((product, i) => (
           <AdminProductTile
             key={i}
             product={product}
-            setId={setCurrentEditId}
+            setId={setCurrentId}
             setFormData={setFormData}
-            setOpenDialog={setOpenDialog}
+            openEdit={setIsCreateDialogOpen}
+            openConfirm={setIsConfirmDialogOpen}
           />
         ))}
       </div>

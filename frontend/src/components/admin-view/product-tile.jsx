@@ -1,13 +1,25 @@
+import { useDispatch } from "react-redux"
+import { deleteProduct } from "@/store/admin-slices/products-slice"
+
 import { Pencil, Trash2 } from "lucide-react"
-import { Button } from "../ui/button"
 import { Card, CardContent, CardFooter } from "../ui/card"
 
-const AdminProductTile = ({product, setId, setFormData, setOpenDialog}) => {
+import { toast } from "sonner"
+
+const AdminProductTile = ({product, setId, setFormData, openEdit, openConfirm}) => {
+  const dispatch = useDispatch();
+
     const handleEdit = () => {
-        setOpenDialog(true);
-        setId(product?._id);
-        setFormData(product);
+      setId(product?._id);
+      openEdit(true);
+      setFormData(product);
     }
+    
+    const handleDelete = () => {
+      setId(product?._id);
+      openConfirm(true);
+    }
+
   return (
     <Card className="w-full max-w-sm mx-auto pt-0">
       <div>
@@ -60,13 +72,14 @@ const AdminProductTile = ({product, setId, setFormData, setOpenDialog}) => {
               strokeWidth={1.75}
               title="Edit"
               className="text-muted-foreground hover:text-accent-foreground cursor-pointer"
-              onClick= {handleEdit}
+              onClick={handleEdit}
             />
             <Trash2
               size={20}
               strokeWidth={1.75}
               title="Delete"
               className="text-muted-foreground hover:text-destructive cursor-pointer"
+              onClick={handleDelete}
             />
           </div>
         </CardFooter>

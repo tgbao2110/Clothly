@@ -66,6 +66,17 @@ const updateProduct = createAsyncThunk('product/update',
   }
 )
 
+//DELETE DeleteProduct thunk
+const deleteProduct = createAsyncThunk('product/delete',
+  async (id, thunkAPI) => {
+    try {
+      const res = await api.delete(`/admin/product/${id}`)
+      return res.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data)
+    }
+  }
+)
 
 ///// Slice /////
 const AdminProductSlices = createSlice({
@@ -87,11 +98,13 @@ const AdminProductSlices = createSlice({
         // ImageUpload states
         builder.addCase(uploadImage.pending, (state) => {
             state.isLoading = true;
-          })
+          }).addCase(uploadImage.rejected, (state) => {
+            state.isLoading = false;
+          } )
         //
         // GetAll states
         builder.addCase(getAllProducts.fulfilled, (state, action) => {
-          state.products = action.payload.data
+          state.products = action.payload.data;
         })
         //
         // Update states
@@ -99,13 +112,24 @@ const AdminProductSlices = createSlice({
           state.isLoading = true;
         }).addCase(updateProduct.fulfilled, (state, action) => {
           state.isLoading = false;
-          const i = state.products.findIndex(p => p._id === action.payload.data._id)
-          if (i !== -1) state.products[i] = action.payload.data
+          const i = state.products.findIndex(p => p._id === action.payload.data._id);
+          if (i !== -1) state.products[i] = action.payload.data;
         }).addCase(updateProduct.rejected, (state) => {
+          state.isLoading = false;
+        })
+        //
+        // Delete states
+        builder.addCase(deleteProduct.pending, (state) => {
+          state.isLoading = true;
+        }).addCase(deleteProduct.fulfilled, (state, action) => {
+          state.isLoading = false;
+          const i = state.products.findIndex(p => p._id === action.payload.data._id);
+          if (i !== -1) state.products.splice(i,1);
+        }).addCase(deleteProduct.rejected, (state) => {
           state.isLoading = false;
         })
     }
 })
 
-export { uploadImage, createProduct, getAllProducts, updateProduct}
+export { uploadImage, createProduct, getAllProducts, updateProduct, deleteProduct}
 export default AdminProductSlices.reducer
