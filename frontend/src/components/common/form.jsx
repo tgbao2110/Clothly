@@ -4,7 +4,23 @@ import { Label } from "../ui/label"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 
-const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText}) => {
+const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText, isFilled}) => {
+
+    const handleInputChange = (e, control) => {
+        let newValue = e.target.value;
+      if (control.type === "number") {
+        if (newValue > control.max)
+            newValue = control.max
+        if (newValue < control.min)
+            return
+        if (control.isInteger && e.target.value % 1 !== 0)
+            newValue= Math.floor(e.target.value)
+      } 
+        setFormData({
+            ...formData,
+            [control.name]: newValue,
+        });
+    };
 
     const rederInputsByComponentType = (control) => {
         const value = formData[control.name];
@@ -13,17 +29,18 @@ const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText})
             
             //// INPUT ////
             case 'input':
-                return <Input 
-                    id = {control.name}
-                    name = {control.name}
-                    placeholder = {control.placeholder}
-                    type = {control.type}
-                    value = {value}
-                    onChange = {e => setFormData({
-                        ...formData,
-                        [control.name]: e.target.value
-                    })}
-                />
+                return (
+                  <Input
+                    id={control.name}
+                    name={control.name}
+                    placeholder={control.placeholder}
+                    type={control.type}
+                    value={value}
+                    max={9999.99}
+                    step={1}
+                    onChange={(e) => handleInputChange(e, control)}
+                  />
+                );
             
             //// SELECT //// 
             case 'select':
@@ -90,7 +107,7 @@ const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText})
         </div>
         
         {/* ===== Button ===== */}
-        <Button type='submit' className="mt-5 cursor-pointer">
+        <Button disabled={!isFilled} type='submit' className="mt-5 cursor-pointer" >
             {buttonText || 'Submit'}
         </Button>
     </form>

@@ -41,6 +41,9 @@ export const createProductForm = [
         name: 'price',
         componentType: 'input',
         type: 'number',
+        isInteger: false,
+        min: 0,
+        max: 9999.99,
         placeholder: 'Enter product price'
     },
     {
@@ -48,6 +51,9 @@ export const createProductForm = [
         name: 'salePrice',
         componentType: 'input',
         type: 'number',
+        isInteger: false,
+        min: 0,
+        max: 9999.99,
         placeholder: 'Enter sale price (optional)'
     },
     {
@@ -55,6 +61,9 @@ export const createProductForm = [
         name: 'stock',
         componentType: 'input',
         type: 'number',
+        isInteger: true,
+        min: 0,
+        max: 999,
         placeholder: 'Enter stock quantity'
     }
 ]

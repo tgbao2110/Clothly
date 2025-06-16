@@ -27,7 +27,7 @@ const AdminProducts = () => {
     price: 0,
     salePrice: 0,
     stock: 0,
-    image: ''
+    image: 'https://i.imgur.com/EJLFNOwg.jpg'
   }
 
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -41,18 +41,22 @@ const AdminProducts = () => {
   const handleCreate = async e => {
     e.preventDefault();
     
-    let uploadRes;
-    // Dispatch POST UploadImage
-    // unwrap: if success → return action.payload
-    try {
-      uploadRes = await dispatch(uploadImage(image)).unwrap();
-    } catch (error) {
-      toast.error("Please select an image");
-      return null
+    let finalData;
+    if (image) {
+      let uploadRes;
+      // Dispatch POST UploadImage
+      // unwrap: if success → return action.payload
+      try {
+        uploadRes = await dispatch(uploadImage(image)).unwrap();
+      } catch (error) {
+        toast.error("Please select an image");
+        return null;
+      }
+      const finalImgUrl = uploadRes?.result?.url;
+      finalData = { ...formData, image: finalImgUrl };
+    } else {
+      finalData = formData
     }
-
-    const finalImgUrl = uploadRes?.result?.url;
-    const finalData = {...formData, image: finalImgUrl};
 
     // Dispatch POST createProduct
     dispatch(createProduct(finalData))
@@ -77,9 +81,14 @@ const AdminProducts = () => {
   const handleUpdate = async e => {
     e.preventDefault();
     
-    const uploadRes = await dispatch(uploadImage(image)).unwrap();
-    const finalImgUrl = uploadRes?.result?.url;
-    const finalData = {...formData, image: finalImgUrl};
+    let finalData
+    if (image) {
+      const uploadRes = await dispatch(uploadImage(image)).unwrap();
+      const finalImgUrl = uploadRes?.result?.url;
+      finalData = {...formData, image: finalImgUrl};
+    } else {
+      finalData = formData;
+    }
 
     console.log('Update product to: ', finalData);  
 
@@ -117,6 +126,14 @@ const AdminProducts = () => {
       })
   }
 
+
+  const isFormFilled = () => {
+    return Object.values(formData)
+      .map(v => v !== '')
+      .every(v => v);
+  }
+  
+
   // Dispatch GET getAllProducts
   useEffect(() => {
     dispatch(getAllProducts())
@@ -135,11 +152,13 @@ const AdminProducts = () => {
   }
 };
 
+  console.log(formData)
+  console.log('isFilled: ', isFormFilled())
 
   return (
     <div className="w-full">
       {/* ==== Add Button ==== */}
-      <div className="flex justify-end">
+      <div className="flex justify-end mb-5">
         <Button onClick={() => setIsCreateDialogOpen(true)}>+ Add product</Button>
       </div>
 
@@ -176,6 +195,7 @@ const AdminProducts = () => {
                   setFormData={setFormData}
                   onSubmit={!currentId ? handleCreate : handleUpdate}
                   buttonText={!currentId ? 'Add Product' : 'Update Product'}
+                  isFilled={isFormFilled()}
                 />
               </div>
             </>

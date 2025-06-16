@@ -1,13 +1,7 @@
-import { useDispatch } from "react-redux"
-import { deleteProduct } from "@/store/admin-slices/products-slice"
-
 import { Pencil, Trash2 } from "lucide-react"
 import { Card, CardContent, CardFooter } from "../ui/card"
 
-import { toast } from "sonner"
-
 const AdminProductTile = ({product, setId, setFormData, openEdit, openConfirm}) => {
-  const dispatch = useDispatch();
 
     const handleEdit = () => {
       setId(product?._id);
@@ -32,14 +26,14 @@ const AdminProductTile = ({product, setId, setFormData, openEdit, openConfirm}) 
 
         <CardContent>
           {/* ===== Title ===== */}
-          <h2 className="text-xl font-bold mb-2 truncate">{product.title}</h2>
+          <h2 className="text-xl font-bold mb-3 truncate">{product.title}</h2>
 
           {/* ===== Price ===== */}
-          <div className="flex flex-col mb-2">
+          <div className="flex flex-row gap-2 mb-3">
             <span
               className={`mb-1 text-md 
                         ${
-                          product.salePrice > 0
+                          product.salePrice !== product.price
                             ? "line-through text-muted-foreground"
                             : "font-bold text-primary"
                         }`}
@@ -48,9 +42,9 @@ const AdminProductTile = ({product, setId, setFormData, openEdit, openConfirm}) 
             </span>
             <span
               className={`text-md font-bold 
-                    ${product.salePrice === 0 && "invisible"}`}
+                    ${product.price === product.salePrice && "invisible"}`}
             >
-              {product.salePrice > 0 ? "$" + product.salePrice : "\u00A0"}
+              {product.price !== product.salePrice ? "$" + product.salePrice : "\u00A0" }
             </span>
           </div>
         </CardContent>
