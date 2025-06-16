@@ -36,8 +36,9 @@ const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText, 
                     placeholder={control.placeholder}
                     type={control.type}
                     value={value}
-                    max={9999.99}
-                    step={1}
+                    min={control.min}
+                    max={control.max}
+                    step={control.isInteger ? 1 : 0.1}
                     onChange={(e) => handleInputChange(e, control)}
                   />
                 );
