@@ -4,7 +4,7 @@ import { Label } from "../ui/label"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 
-const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText, isFilled}) => {
+const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText}) => {
 
     const handleInputChange = (e, control) => {
         let newValue = e.target.value;
@@ -20,6 +20,12 @@ const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText, 
             ...formData,
             [control.name]: newValue,
         });
+    };
+
+    const isFormFilled = () => {
+      return Object.values(formData)
+        .map((v) => v !== "")
+        .every((v) => v);
     };
 
     const rederInputsByComponentType = (control) => {
@@ -108,7 +114,7 @@ const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText, 
         </div>
         
         {/* ===== Button ===== */}
-        <Button disabled={!isFilled} type='submit' className="mt-5 cursor-pointer" >
+        <Button disabled={!isFormFilled()} type='submit' className="mt-5 cursor-pointer" >
             {buttonText || 'Submit'}
         </Button>
     </form>

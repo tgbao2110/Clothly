@@ -125,13 +125,6 @@ const AdminProducts = () => {
           toast.error(action?.payload?.message)
       })
   }
-
-
-  const isFormFilled = () => {
-    return Object.values(formData)
-      .map(v => v !== '')
-      .every(v => v);
-  }
   
 
   // Dispatch GET getAllProducts
@@ -151,9 +144,6 @@ const AdminProducts = () => {
     setCurrentId(null);
   }
 };
-
-  console.log(formData)
-  console.log('isFilled: ', isFormFilled())
 
   return (
     <div className="w-full">
@@ -195,7 +185,6 @@ const AdminProducts = () => {
                   setFormData={setFormData}
                   onSubmit={!currentId ? handleCreate : handleUpdate}
                   buttonText={!currentId ? 'Add Product' : 'Update Product'}
-                  isFilled={isFormFilled()}
                 />
               </div>
             </>

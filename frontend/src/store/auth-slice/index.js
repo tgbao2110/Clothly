@@ -38,9 +38,24 @@ const loginUser = createAsyncThunk('/auth/login',
     }
 )
 
+// Logout thunk
+const logoutUser = createAsyncThunk('/auth/logout',
+    async(formData, thunkAPI) => {
+        try {
+            const res = await api.post('/auth/logout', {}, {
+                withCredentials: true
+            })
+            return res.data
+        }
+        catch (error) {
+          return thunkAPI.rejectWithValue(error.response?.data);
+        }
+    }
+)
+
 // Check auth thunk (validate session)
 const checkAuth = createAsyncThunk('/auth/check-auth',
-    async(formData,thunkAPI) => {
+    async(_,thunkAPI) => {
         try {
             const res = await api.get('/auth/check-auth', {
                 withCredentials: true,
@@ -95,6 +110,17 @@ const authSlice = createSlice({
             state.user = null;
         })
         //
+        // Logout states
+        builder.addCase(logoutUser.pending, state => {
+            state.isLoading = true;
+        }).addCase(logoutUser.fulfilled, state => {
+            state.isLoading = false;
+            state.isAuthenticated = false;
+            state.user = null;
+        }).addCase(logoutUser.rejected, state => {
+            state.isLoading = false;
+        })
+        //
         // CheckAuth states
         builder.addCase(checkAuth.pending, state=>{
             state.isLoading = true;
@@ -111,5 +137,5 @@ const authSlice = createSlice({
 })
 
 export const { setUser } = authSlice.actions;
-export { registerUser, loginUser, checkAuth }
+export { registerUser, loginUser, logoutUser, checkAuth }
 export default authSlice.reducer;

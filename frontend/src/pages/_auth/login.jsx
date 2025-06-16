@@ -7,8 +7,6 @@ import CommonForm from "@/components/common/form"
 import { loginFormControls } from "@/config"
 import { loginUser } from "@/store/auth-slice"
 
-
-
 const Login = () => {
   const initState = {
     email: "",
