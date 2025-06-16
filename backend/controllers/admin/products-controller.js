@@ -138,9 +138,13 @@ const deleteProduct = async(req, res) => {
                 message: "Product not found"
             })
         }
+
+        await imageDeleteUtil(foundProduct.image);
+
         res.status(200).json({
             success: true,
-            message: "Product deleted successfully"
+            message: "Product deleted successfully",
+            data: foundProduct
         })
     } catch (error) {
         console.log("Error deleting product: ", error)
