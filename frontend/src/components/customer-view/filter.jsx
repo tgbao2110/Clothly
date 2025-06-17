@@ -3,7 +3,7 @@ import { Label } from "../ui/label"
 import { Checkbox } from "../ui/checkbox"
 import { Separator } from "../ui/separator"
 
-const ProductFilter = () => {
+const ProductFilter = ({filters, handleFilter}) => {
   return (
     <div className="w-50">
         <div className="p-4 space-y-4">
@@ -17,7 +17,14 @@ const ProductFilter = () => {
                             {
                                 filterOptions[key].map(option=>(
                                     <Label key={option.label}>
-                                        <Checkbox/>
+                                        <Checkbox 
+                                            checked = {
+                                                !!(filters &&
+                                                filters[key] &&
+                                                filters[key].includes(option.id))
+                                            }
+                                            onCheckedChange={() => handleFilter(key, option.id)}
+                                        />
                                         {option.label}
                                     </Label>
                                 ))
