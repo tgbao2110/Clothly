@@ -15,7 +15,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenu
 const Listing = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const products = useSelector(state => state.customerProducts.products)
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
@@ -31,7 +31,7 @@ const Listing = () => {
     })
   }, [dispatch, searchParams])
 
-  // Parse filters from URL
+  // Parse filters and sort from URL
   useEffect(() => {
     const parsedFilters = {};
     for(const key of Object.keys(filterOptions)) {
@@ -40,18 +40,35 @@ const Listing = () => {
         parsedFilters[key] = value.split(',');
       }
     }
-    setFilters(parsedFilters)
-  }, [])
+    const parsedSort = searchParams.get('sort');
+    setFilters(parsedFilters);
+    setSort(parsedSort);
+  }, [searchParams])
 
   // Update URL with query string when filters change
-  const updateUrl = filters => {
-    const params = new URLSearchParams();
+  const updateFiltersToUrl = filters => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    // Delete all filters in param
+    for (const key of Object.keys(filterOptions)) {
+      params.delete(key);
+    }
+
+    // Add filters from checkboxes to param
     for (const [key, values] of Object.entries(filters)) {
-      if(values.length > 0) {
+      if (values.length > 0) {
         params.set(key, values.join(','));
       }
     }
-    navigate(`/listing?${params.toString()}`);
+
+    setSearchParams(params); // Update URL
+  };
+
+  // Update URL with query string when sort change
+  const updateSortToUrl = sort => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('sort', sort);
+    setSearchParams(params);
   }
 
   // Handle Filter
@@ -74,12 +91,13 @@ const Listing = () => {
     };
 
     setFilters(updatedFilters);
-    updateUrl(updatedFilters);
+    updateFiltersToUrl(updatedFilters);
   }
 
-  // Handle Filter
+  // Handle Sort
   const handleSort = value => {
     setSort(value);
+    updateSortToUrl(value);
     console.log(value)
   }
 
