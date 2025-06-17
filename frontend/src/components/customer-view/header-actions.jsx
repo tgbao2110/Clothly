@@ -34,7 +34,7 @@ const CustomerHeaderActions = () => {
         <DropdownMenu>
             <DropdownMenuTrigger asChild className='cursor-pointer'>
                 <Avatar>
-                    <AvatarFallback className="bg-black text-white font-extrabold">
+                    <AvatarFallback className="bg-black text-white font-medium">
                         {isAuthenticated && user?.userName[0]?.toUpperCase()}
                     </AvatarFallback>
                 </Avatar>
