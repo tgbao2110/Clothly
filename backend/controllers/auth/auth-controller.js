@@ -47,8 +47,7 @@ const register = async(req, res) => {
 // Login
 const login = async(req, res) => {
     const {email, password} = req.body;
-    console.log("Email: ", email)
-    console.log("Pw: ", password)
+    
     try {
         //
         // Check if email exists
@@ -74,6 +73,7 @@ const login = async(req, res) => {
         // Create token
         const token = jwt.sign({
             id: checkUser._id,
+            userName: checkUser.userName,
             email: checkUser.email,
             role: checkUser.role
         }, 'CLIENT_SECRET_KEY',{expiresIn: '60m'});
@@ -91,6 +91,7 @@ const login = async(req, res) => {
             message: "Logged in successfully",
             user: {
                 id: checkUser._id,
+                userName: checkUser.userName,
                 email: checkUser.email,
                 role: checkUser.role
             }
