@@ -2,26 +2,34 @@ import {Product} from '../../models/Product.js'
 
 const getFilteredProducts = async(req, res) => {
     try {
-        const query = {};
+        const filter = {};
+        const sort = {};
         // Expected:
-        // query = { category: { $in: ['men', 'women'] },
-        //           brand: { $in: ['nike', 'adidas'] }, }
-
+        // - filter = { category: { $in: ['men', 'women'] },
+        //              brand: { $in: ['nike', 'adidas'] },}
+        // - sort = { salePrice: 1 }
 
         // Parse categories from req.query
         if (req.query.categories) {
             const categories = req.query.categories.split(',');
-            query.category = { $in: categories };
+            filter.category = { $in: categories };
         }
 
         // Parse brands from req.query
         if (req.query.brands) {
             const brands = req.query.brands.split(',');
-            query.brand = { $in: brands };
+            filter.brand = { $in: brands };
+        }
+
+        //Parse sort from req.query
+        if (req.query.sort) {
+            let [field, direction] = req.query.sort.split('-');
+            if (field === 'price') field ='salePrice';
+            sort[field] = direction === 'asc' ? 1 : -1;
         }
 
         // Find products by query
-        const products = await Product.find(query);
+        const products = await Product.find(filter).sort(sort);
 
         res.status(200).json({
             success: true,
