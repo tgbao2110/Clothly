@@ -103,8 +103,13 @@ const AdminProductSlices = createSlice({
           } )
         //
         // GetAll states
-        builder.addCase(getAllProducts.fulfilled, (state, action) => {
+        builder.addCase(getAllProducts.pending, state => {
+          state.isLoading = true;
+        }).addCase(getAllProducts.fulfilled, (state, action) => {
+          state.isLoading = false;
           state.products = action.payload.data;
+        }).addCase(getAllProducts.rejected, state => {
+          state.isLoading = false;
         })
         //
         // Update states

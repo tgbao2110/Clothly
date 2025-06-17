@@ -1,12 +1,28 @@
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+
+import { sortOptions } from "@/config"
 import ProductFilter from "@/components/customer-view/filter"
 import CustomerProductTile from "@/components/customer-view/product-tile"
+import { getFilteredProducts } from "@/store/customer-slices/products-slice"
+
 import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Separator } from "@/components/ui/separator"
-import { sortOptions } from "@/config"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { ArrowDownUp } from "lucide-react"
 
 const Listing = () => {
+  const dispatch = useDispatch();
+  const products = useSelector(state => state.customerProducts.products)
+  console.log(products);
+
+  useEffect(() => {
+    dispatch(getFilteredProducts())
+    .then(action => {
+      console.log(action?.payload?.message);
+    })
+  }, [])
+
   return (
     <div className="w-full p-4 md:p-6 grid grid-cols-[auto_1fr] gap-3">
       {/* ====== Left Grid (filter) ====== */}
@@ -35,7 +51,9 @@ const Listing = () => {
 
         {/* ==== Products ==== */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-         
+          {products.map(product => (
+            <CustomerProductTile product={product}/>
+          ))}
         </div>
       </div>
     </div>
