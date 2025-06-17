@@ -114,7 +114,7 @@ const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText})
         </div>
         
         {/* ===== Button ===== */}
-        <Button disabled={!isFormFilled()} type='submit' className="mt-5 cursor-pointer" >
+        <Button disabled={!isFormFilled()} type='submit' className="mt-5" >
             {buttonText || 'Submit'}
         </Button>
     </form>

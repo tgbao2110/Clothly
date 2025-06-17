@@ -23,6 +23,7 @@ import Account from "./pages/customer-view/account";
 import NotFound from "./pages/not-found";
 import CheckAuth from "./components/common/check-auth";
 import { checkAuth } from "./store/auth-slice";
+import Product from "./pages/customer-view/product";
 
 
 function App() {
@@ -78,6 +79,7 @@ function App() {
           </CheckAuth>
         }>
               <Route path="" element={<Home/>}/>
+              <Route path="/product/:id" element={<Product/>}/>
               <Route path="listing" element={<Listing/>}/>
               <Route path="checkout" element={<Checkout/>}/>
               <Route path="account" element={<Account/>}/>
