@@ -40,7 +40,7 @@ const loginUser = createAsyncThunk('/auth/login',
 
 // Logout thunk
 const logoutUser = createAsyncThunk('/auth/logout',
-    async(formData, thunkAPI) => {
+    async(_, thunkAPI) => {
         try {
             const res = await api.post('/auth/logout', {}, {
                 withCredentials: true

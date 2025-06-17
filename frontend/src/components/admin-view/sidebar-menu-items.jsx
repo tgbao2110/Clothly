@@ -9,11 +9,11 @@ const AdminSidebarMenuItems = ({setOpen}) => {
   return (
     <nav>
         <ul className="mt-0 lg:mt-7 text-lg ">
-          {adminSidebarMenuItems.map((item, id) => {
+          {adminSidebarMenuItems.map((item, i) => {
             const isActive = location.pathname.includes(item.path); // set active based on location
             return (
               <li
-                key={id}
+                key={i}
                 onClick={() => {
                   setOpen?.(false);
                   navigate(item.path);

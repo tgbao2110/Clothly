@@ -26,7 +26,9 @@ const Login = () => {
       // Handle success
       if(action?.payload?.success) {
         toast.success(action?.payload?.message);
-        navigate('/shop');
+        if(action?.payload?.user.role === 'admin')
+          navigate('/admin/');
+        else navigate('/');
       }
       //
       // Handle server error

@@ -72,7 +72,7 @@ function App() {
 
 
         {/* ==== Customer Routes ===== */}
-        <Route path="/shop" element={
+        <Route path="/" element={
           <CheckAuth isAuthenticated={isAuthenticated} user={user}>
             <CustomerLayout/>
           </CheckAuth>

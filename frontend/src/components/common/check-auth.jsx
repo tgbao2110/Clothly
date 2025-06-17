@@ -22,7 +22,7 @@ const CheckAuth = ({ isAuthenticated, user, children }) => {
       location.pathname.includes("/register"))
   ) {
     if(user?.role === 'admin') return <Navigate to="/admin/dashboard"/>
-    else return <Navigate to="/shop"/>
+    else return <Navigate to="/"/>
   }
 
   //
@@ -36,12 +36,12 @@ const CheckAuth = ({ isAuthenticated, user, children }) => {
 
   //
   // Admin && in customer pages => navigate to admin
-  if(
-    isAuthenticated && user?.role === 'admin' &&
-    location.pathname.includes("/shop")
-  ){
-    return <Navigate to="/admin/dashboard"/>
-  }
+  // if(
+  //   isAuthenticated && user?.role === 'admin' &&
+  //   location.pathname.includes("/shop")
+  // ){
+  //   return <Navigate to="/admin/dashboard"/>
+  // }
 
 
   return <>{children}</>
