@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Star } from "lucide-react";
 
@@ -7,31 +7,33 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-
-const product = {
-  title: "Nike Air Max 270",
-  description:
-    "The Nike Air Max 270 combines modern comfort with classic style. Perfect for everyday wear.",
-  category: "men",
-  brand: "nike",
-  price: 120,
-  salePrice: 99,
-  stock: 10,
-  image: "https://res.cloudinary.com/dxpkpxyme/image/upload/v1752691847/gmprxp2kv0oqpkohhazz.avif",
-  rating: 4,
-  reviews: [
-    { rating: 5, comment: "Amazing comfort and style!" },
-    { rating: 4, comment: "" },
-    { rating: 3, comment: "Good but a bit tight." },
-  ],
-};
+import { useDispatch, useSelector } from "react-redux";
+import { getProductById } from "@/store/customer-slices/products-slice";
+import { useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 const Product = () => {
-
+    const dispatch = useDispatch();
+    const id = useParams().id;
+    const [product, setProduct] = useState(null)
+    const [isOutOfStock, setIsOutOfStock] = useState(true);
     const [qty, setQty] = useState(1);
-    const isOutOfStock = !(product.stock > 0)
+    const isLoading = useSelector(state => state.customerProducts.isLoading);
+
+    useEffect(()=> {
+      dispatch(getProductById(id))
+      .then(action => {
+        if(action.payload?.success) {
+          setProduct(action.payload?.data);
+          setIsOutOfStock(action.payload?.data.stock <= 0);
+        } else {
+          toast.error(action.payload?.message);
+        }
+      })
+    },[])
 
   return (
+    product ? 
     <div className="max-w-5xl mx-auto p-6 space-y-8">
       {/* ===== Image & Info + Actions ===== */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-10">
@@ -150,10 +152,17 @@ const Product = () => {
               </div>
             </div>
 
-            <p className="text-sm text-muted-foreground px-1">Như cặc</p>
+            <p className="text-sm text-muted-foreground px-1">Test review...</p>
           </CardContent>
         </Card>
       </div>
+    </div>
+    :
+    <div className="flex flex-row justify-center items-center w-full min-h-[500px]">
+      <h1 className="text-lg font-bold">{
+        isLoading ? 'Loading...'
+        : 'Product not found!'
+      }</h1>
     </div>
   );
 }

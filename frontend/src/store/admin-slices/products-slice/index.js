@@ -50,7 +50,7 @@ const getAllProducts = createAsyncThunk('/products/get-all',
   }
 )
 
-// POST UpdateProduct thunk
+// PUT UpdateProduct thunk
 const updateProduct = createAsyncThunk('product/update',
   async ({id, formData}, thunkAPI) => {
     try {

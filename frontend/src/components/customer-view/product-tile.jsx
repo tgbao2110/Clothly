@@ -1,9 +1,13 @@
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "../ui/card"
 
 const CustomerProductTile = ({product}) => {
 
+  const navigate= useNavigate()
   return (
-    <Card className="w-full max-w-sm mx-auto pt-0">
+    <Card className="w-full max-w-sm mx-auto pt-0 cursor-pointer"
+          onClick = {() => navigate(`/product/${product._id}`)}
+    >
       <div>
         {/* ===== Image ===== */}
         <img
