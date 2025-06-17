@@ -8,9 +8,10 @@ const initialState = {
 
 // GET GetFilteredProducts thunk
 const getFilteredProducts = createAsyncThunk('/products/get-filtered',
-  async (_, thunkAPI) => {
+  async (query, thunkAPI) => {
       try {
-          const res = await api.get("/customer/product/");
+        console.log(`Calling API: /customer/product?${query}`)
+          const res = await api.get(`/customer/product?${query}`);
           return res.data;
       } catch (error) {
           return thunkAPI.rejectWithValue(error.response?.data);

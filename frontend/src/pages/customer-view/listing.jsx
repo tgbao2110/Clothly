@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useSearchParams } from "react-router-dom"
 
-import { sortOptions } from "@/config"
+import { filterOptions, sortOptions } from "@/config"
 import ProductFilter from "@/components/customer-view/filter"
 import CustomerProductTile from "@/components/customer-view/product-tile"
 import { getFilteredProducts } from "@/store/customer-slices/products-slice"
@@ -22,13 +22,19 @@ const Listing = () => {
 
   // Fetch products
   useEffect(() => {
-    dispatch(getFilteredProducts())
-  }, [])
+    dispatch(getFilteredProducts(searchParams.toString()))
+    .then(action=> {
+      if (action.payload.success)
+        console.log ("Products fetched successfully: ", action.payload)
+      else
+        console.log ("Error fetching products")
+    })
+  }, [dispatch, searchParams])
 
   // Parse filters from URL
   useEffect(() => {
     const parsedFilters = {};
-    for(const key of Object.keys(filters)) {
+    for(const key of Object.keys(filterOptions)) {
       const value = searchParams.get(key);
       if (value) {
         parsedFilters[key] = value.split(',');
