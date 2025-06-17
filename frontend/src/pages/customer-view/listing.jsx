@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import { useNavigate, useSearchParams } from "react-router-dom"
 
 import { sortOptions } from "@/config"
 import ProductFilter from "@/components/customer-view/filter"
@@ -8,22 +9,46 @@ import { getFilteredProducts } from "@/store/customer-slices/products-slice"
 
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { ArrowDownUp } from "lucide-react"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 const Listing = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams();
   const products = useSelector(state => state.customerProducts.products)
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
 
+  // Fetch products
   useEffect(() => {
     dispatch(getFilteredProducts())
-    .then(action => {
-      console.log(action?.payload?.message);
-    })
   }, [])
 
+  // Parse filters from URL
+  useEffect(() => {
+    const parsedFilters = {};
+    for(const key of Object.keys(filters)) {
+      const value = searchParams.get(key);
+      if (value) {
+        parsedFilters[key] = value.split(',');
+      }
+    }
+    setFilters(parsedFilters)
+  }, [])
+
+  // Update URL with query string when filters change
+  const updateUrl = filters => {
+    const params = new URLSearchParams();
+    for (const [key, values] of Object.entries(filters)) {
+      if(values.length > 0) {
+        params.set(key, values.join(','));
+      }
+    }
+    navigate(`/listing?${params.toString()}`);
+  }
+
+  // Handle Filter
   const handleFilter = (section, selected) => {
     const currentSection = filters[section] || [];
     let updatedSection;
@@ -43,9 +68,10 @@ const Listing = () => {
     };
 
     setFilters(updatedFilters);
-    console.log(updatedFilters);
+    updateUrl(updatedFilters);
   }
 
+  // Handle Filter
   const handleSort = value => {
     setSort(value);
     console.log(value)
