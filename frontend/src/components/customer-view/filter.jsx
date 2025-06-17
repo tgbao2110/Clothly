@@ -5,7 +5,7 @@ import { Separator } from "../ui/separator"
 
 const ProductFilter = () => {
   return (
-    <div className="rounded-lg shadow-sm">
+    <div className="w-50">
         <div className="p-4 space-y-4">
             {
                 Object.keys(filterOptions).map((key,i) => (
