@@ -1,5 +1,5 @@
 import Cart from "../../models/Cart.js";
-import Product from "../../models/Product.js"
+import {Product} from "../../models/Product.js"
 
 const addToCart = async(req, res) => {
     try {
@@ -40,7 +40,7 @@ const addToCart = async(req, res) => {
         const existingItem = cart.items.find(item => item.productId.toString() === productId)
         //// if item exists dtb qty += req qty
         if(existingItem)
-            existingItem.qty += qty;
+            existingItem.qty += Number(qty);
         //// else push req item to dtb item
         else
             cart.items.push({productId,qty})
