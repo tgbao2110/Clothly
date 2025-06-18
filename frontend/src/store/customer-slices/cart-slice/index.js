@@ -2,8 +2,9 @@ import api from "@/lib/api"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-    isLoading: false,
-    items: []
+  isLoading: false,
+  items: JSON.parse(localStorage.getItem("cartItems")) || [],
+  itemsCount: parseInt(localStorage.getItem("itemsCount")) || 0
 }
 
 // POST addToCart thunk
@@ -28,7 +29,21 @@ const CartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers:{},
-    extraReducers:{}
+    extraReducers: (builder => {
+        // addToCart states
+        builder.addCase(addToCart.pending, state => {
+            state.isLoading = true;
+        }).addCase(addToCart.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.items = action.payload.data.items;
+            state.itemsCount = action.payload.data.items.length;
+            localStorage.setItem("cartItems", JSON.stringify(state.items));
+            localStorage.setItem("itemsCount", JSON.stringify(state.itemsCount));
+        }).addCase(addToCart.rejected, state => {
+            state.isLoading = false;
+        })
+        //
+    })
 });
 
 export { addToCart }

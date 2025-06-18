@@ -1,17 +1,27 @@
-import { LogOut, ShoppingCart, User } from "lucide-react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
-import { Avatar, AvatarFallback } from "../ui/avatar"
-import { Button } from "../ui/button"
-import { DropdownMenuGroup, DropdownMenuItem } from "@radix-ui/react-dropdown-menu"
-import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { logoutUser } from "@/store/auth-slice"
+import { useDispatch, useSelector } from "react-redux"
 import { toast } from "sonner"
+import { LogOut, ShoppingCart, User } from "lucide-react"
+
+import {
+    DropdownMenu,
+    DropdownMenuGroup,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { Button } from "../ui/button"
+import { Avatar, AvatarFallback } from "../ui/avatar"
+
+import { logoutUser } from "@/store/auth-slice"
 
 const CustomerHeaderActions = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const {isAuthenticated, user} = useSelector(state => state.auth);
+    const cartCount = useSelector(state => state.cart.itemsCount)
 
     const handleLogout = () => {
         dispatch(logoutUser()).then(action => {
@@ -22,12 +32,21 @@ const CustomerHeaderActions = () => {
         })
     }
   return (
-    <div className="flex flex-row items-center gap-2">
+    <div className="flex flex-row items-center gap-3">
 
         {/* ==== Cart ==== */}
-        <Button variant='outline' size='icon'>
+        <Button variant='outline' size='icon' className='relative' >
             <ShoppingCart />
             <span className="sr-only">User cart</span>
+            { 
+                cartCount > 0 &&
+                <div className="flex justify-center items-center rounded-full
+                                absolute h-5 w-5 z-50 bottom-6 left-6
+                                text-[11px] bg-primary text-background"    
+                >
+                    <p>{cartCount < 10 ? cartCount : '9+' }</p>
+                </div>
+            }
         </Button>
 
         {/* ==== Avatar ==== */}
@@ -45,16 +64,11 @@ const CustomerHeaderActions = () => {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator/>
                 <DropdownMenuGroup >
-                    <DropdownMenuItem className='flex flex-row items-center gap-2 p-2 
-                            rounded-sm cursor-pointer hover:bg-accent'
-                        onClick={() => navigate('/account')}    
-                    >
+                    <DropdownMenuItem className='py-2' onClick={()=>navigate('/account')}>
                         <User size='20px'/>
                         <span>Profile</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem className='flex flex-row items-center gap-2 p-2
-                            rounded-sm cursor-pointer hover:bg-accent text-destructive'
-                        onClick={handleLogout}>
+                    <DropdownMenuItem className='py-2' onClick={handleLogout}>
                         <LogOut size='20px'/>
                         <span>Logout</span>
                     </DropdownMenuItem>
