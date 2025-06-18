@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProductById } from "@/store/customer-slices/products-slice";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
+import { addToCart } from "@/store/customer-slices/cart-slice";
 
 const Product = () => {
     const dispatch = useDispatch();
@@ -19,7 +20,9 @@ const Product = () => {
     const [isOutOfStock, setIsOutOfStock] = useState(true);
     const [qty, setQty] = useState(1);
     const isLoading = useSelector(state => state.customerProducts.isLoading);
+    const userId = useSelector(state => state.auth.user.id)
 
+    // Fetch product details
     useEffect(()=> {
       dispatch(getProductById(id))
       .then(action => {
@@ -31,6 +34,21 @@ const Product = () => {
         }
       })
     },[])
+
+    // Handle add to cart
+    const handleAddToCart = e => {
+      e.preventDefault();
+
+      dispatch(addToCart({userId, productId: id, qty}))
+      .then(action => {
+        if(action.payload?.success){
+          console.log('Added to cart', action.payload);
+          toast.success(action.payload?.message)
+        } else {
+          toast.error(action.payload?.message)
+        }
+      })
+    }
 
   return (
     product ? 
@@ -122,7 +140,7 @@ const Product = () => {
                 onKeyDown={(e) => e.preventDefault()}
                 onChange={(e) => setQty(e.target.value)}
               />
-              <Button>Add to cart</Button>
+              <Button onClick={handleAddToCart}>Add to cart</Button>
             </div>
           </div>
         </div>

@@ -33,7 +33,7 @@ const getProductById = createAsyncThunk('/product/get-by-id',
 )
 
 ///// Slice /////
-const CustomerProductSlices = createSlice({
+const CustomerProductSlice = createSlice({
     name: 'customerProducts',
     initialState,
     reducers:{},
@@ -61,4 +61,4 @@ const CustomerProductSlices = createSlice({
 })
 
 export { getFilteredProducts, getProductById }
-export default CustomerProductSlices.reducer
+export default CustomerProductSlice.reducer
