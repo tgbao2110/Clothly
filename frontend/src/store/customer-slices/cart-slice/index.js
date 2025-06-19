@@ -24,6 +24,18 @@ const addToCart = createAsyncThunk('/cart/add',
   }
 )
 
+// GET getCartItems thunk
+const getCartItems = createAsyncThunk('/cart/get',
+    async(userId, thunkAPI) => {
+        try {
+            const res = await api.get(`/cart/${userId}`);
+            return res.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+)
+
 ///// Slice /////
 const CartSlice = createSlice({
     name: 'cart',
@@ -42,9 +54,16 @@ const CartSlice = createSlice({
         }).addCase(addToCart.rejected, state => {
             state.isLoading = false;
         })
-        //
+        // getCartItems states
+        builder.addCase(getCartItems.pending, state => {
+            state.isLoading = true;
+        }).addCase(getCartItems.fulfilled, (state, action) => {
+            state.isLoading = false;
+        }).addCase(getCartItems.rejected, state => {
+            state.isLoading = false;
+        })
     })
 });
 
-export { addToCart }
+export { addToCart, getCartItems }
 export default CartSlice.reducer

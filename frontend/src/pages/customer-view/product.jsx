@@ -140,7 +140,7 @@ const Product = () => {
                 onKeyDown={(e) => e.preventDefault()}
                 onChange={(e) => setQty(e.target.value)}
               />
-              <Button onClick={handleAddToCart}>Add to cart</Button>
+              <Button disabled={isOutOfStock} onClick={handleAddToCart}>Add to cart</Button>
             </div>
           </div>
         </div>
