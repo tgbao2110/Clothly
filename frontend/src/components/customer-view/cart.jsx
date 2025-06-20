@@ -5,27 +5,18 @@ import {
   SheetHeader,
   SheetTitle,
 } from "../ui/sheet";
-import { useDispatch, useSelector } from "react-redux";
-import { getCartItems } from "@/store/customer-slices/cart-slice";
+import { useSelector } from "react-redux";
 import { Button } from "../ui/button";
 import CartItem from "./cart-item";
-import { Separator } from "@radix-ui/react-dropdown-menu";
 
-const CartSheetContent = ({ isCartOpen }) => {
-  const dispatch = useDispatch();
-  const userId = useSelector((state) => state.auth.user.id);
-  const itemsCount = useSelector((state) => state.cart.itemsCount);
+const CartSheetContent = ({isCartOpen}) => {
+  const currentItems = useSelector(state => state.cart.items);
   const [items, setItems] = useState([]);
-
+  //
   useEffect(() => {
-    if (itemsCount > 0 && isCartOpen) {
-      dispatch(getCartItems(userId)).then((action) => {
-        if (action.payload.success) {
-          setItems(action.payload.data);
-        }
-      });
-    }
-  }, [isCartOpen, userId, itemsCount]);
+    if(isCartOpen)
+        setItems(currentItems);
+  },[isCartOpen, currentItems]);
   //
   // Handle update
   const handleQtyChange = (productId, newQty) => {
@@ -37,19 +28,26 @@ const CartSheetContent = ({ isCartOpen }) => {
   };
   //
   // Handle Delete
-  const handleDeleteItem = (productId) => {
+  const handleDeleteItem = productId => {
     setItems((prev) => prev.filter((item) => item.product._id !== productId));
   };
   //
   // Validate product qty
   const hasInvalidItems = items.some(
-    (item) => item.product.stock <= 0 || item.qty > item.product.stock
+    item => item.product.stock <= 0 || item.qty > item.product.stock
   );
   //
   // Handle Checkout
   const handleCheckout = () => {
     console.log("Checking out:", items);
   };
+  //
+  // Handle Update when sheet closed
+  useEffect(() => {
+    if (!isCartOpen && items.length > 0) {
+        console.log("Updating cart: ", items);
+    }
+  }, [isCartOpen])
 
   return (
     <SheetContent className="flex flex-col h-full p-0">

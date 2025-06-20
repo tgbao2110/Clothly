@@ -24,7 +24,7 @@ const CustomerHeaderActions = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const {isAuthenticated, user} = useSelector(state => state.auth);
-    const cartCount = useSelector(state => state.cart.itemsCount)
+    const cartCount = useSelector(state => state.cart.itemsCount);
 
     const [isCartOpen, setIsCartOpen] = useState(false);
 

@@ -47,8 +47,8 @@ const CartSlice = createSlice({
             state.isLoading = true;
         }).addCase(addToCart.fulfilled, (state, action) => {
             state.isLoading = false;
-            state.items = action.payload.data.items;
-            state.itemsCount = action.payload.data.items.length;
+            state.items = action.payload.data;
+            state.itemsCount = action.payload.data.length;
             localStorage.setItem("cartItems", JSON.stringify(state.items));
             localStorage.setItem("itemsCount", JSON.stringify(state.itemsCount));
         }).addCase(addToCart.rejected, state => {
@@ -59,6 +59,10 @@ const CartSlice = createSlice({
             state.isLoading = true;
         }).addCase(getCartItems.fulfilled, (state, action) => {
             state.isLoading = false;
+            state.items = action.payload.data;
+            state.itemsCount = action.payload.data.length;
+            localStorage.setItem("cartItems", JSON.stringify(state.items));
+            localStorage.setItem("itemsCount", JSON.stringify(state.itemsCount));
         }).addCase(getCartItems.rejected, state => {
             state.isLoading = false;
         })
