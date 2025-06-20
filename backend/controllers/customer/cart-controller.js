@@ -50,7 +50,7 @@ const addToCart = async(req, res) => {
         res.status(200).json({
             success: true,
             message: 'Added to cart',
-            data: cart 
+            data: cart.items
         })
 
     } catch (error) {
