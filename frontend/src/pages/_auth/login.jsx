@@ -6,6 +6,7 @@ import { toast } from "sonner"
 import CommonForm from "@/components/common/form"
 import { loginFormControls } from "@/config"
 import { loginUser } from "@/store/auth-slice"
+import { getCartItems } from "@/store/customer-slices/cart-slice"
 
 const Login = () => {
   const initState = {
@@ -26,6 +27,8 @@ const Login = () => {
       // Handle success
       if(action?.payload?.success) {
         toast.success(action?.payload?.message);
+        console.log(`getcartitems(${action.payload.user.id})`)
+        dispatch(getCartItems(action?.payload?.user.id))
         if(action?.payload?.user.role === 'admin')
           navigate('/admin/');
         else navigate('/');
