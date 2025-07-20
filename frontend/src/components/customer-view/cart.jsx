@@ -47,6 +47,11 @@ const CartSheetContent = ({isCartOpen}) => {
     }
   }, [isCartOpen])
   //
+  // Total Price
+  const totalPrice = items.reduce((sum, item) => {
+    return sum + item.product.salePrice*item.qty;
+  },0)
+  //
   // Handle Checkout
   const handleCheckout = () => {
     console.log('Checking out: ',items);
@@ -73,7 +78,7 @@ const CartSheetContent = ({isCartOpen}) => {
         <div className="space-y-4">
           <div className="flex flex-row justify-between">
             <span className="font-bold">Total</span>
-            <span className="font-bold">$10000</span>
+            <span className="font-bold">${totalPrice.toFixed(2)}</span>
           </div>
         </div>
         <div className="flex flex-col w-full gap-2">
