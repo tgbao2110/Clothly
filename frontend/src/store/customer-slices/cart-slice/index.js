@@ -7,6 +7,11 @@ const initialState = {
   itemsCount: parseInt(localStorage.getItem("itemsCount")) || 0
 }
 
+const saveStateToStorage = state => {
+    localStorage.setItem("cartItems", JSON.stringify(state.items));
+    localStorage.setItem("itemsCount", JSON.stringify(state.itemsCount));
+}
+
 // POST addToCart thunk
 const addToCart = createAsyncThunk('/cart/add',
   async({userId, productId, qty}, thunkAPI) => {
@@ -17,6 +22,7 @@ const addToCart = createAsyncThunk('/cart/add',
                 "Content-Type": "application/json"
             }
         });
+        console.log ("ADD RETURNS: ", res.data)
         return res.data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.response.data);
@@ -29,6 +35,22 @@ const getCartItems = createAsyncThunk('/cart/get',
     async(userId, thunkAPI) => {
         try {
             const res = await api.get(`/cart/${userId}`);
+            return res.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+)
+
+// PUT updateCart thunk
+const updateCart = createAsyncThunk('/cart/update',
+    async({userId, items}, thunkAPI) => {
+        try {
+            const res = await api.put('/cart', {userId, items}, {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
             return res.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -49,8 +71,7 @@ const CartSlice = createSlice({
             state.isLoading = false;
             state.items = action.payload.data;
             state.itemsCount = action.payload.data.length;
-            localStorage.setItem("cartItems", JSON.stringify(state.items));
-            localStorage.setItem("itemsCount", JSON.stringify(state.itemsCount));
+            saveStateToStorage(state);
         }).addCase(addToCart.rejected, state => {
             state.isLoading = false;
         })
@@ -61,13 +82,24 @@ const CartSlice = createSlice({
             state.isLoading = false;
             state.items = action.payload.data;
             state.itemsCount = action.payload.data.length;
-            localStorage.setItem("cartItems", JSON.stringify(state.items));
-            localStorage.setItem("itemsCount", JSON.stringify(state.itemsCount));
+            saveStateToStorage(state);
         }).addCase(getCartItems.rejected, state => {
+            state.isLoading = false;
+        })
+        // updateCart states
+        builder.addCase(updateCart.pending, state => {
+            state.isLoading = true;
+        }).addCase(updateCart.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.items = action.payload.data;
+            state.itemsCount = action.payload.data.length;
+            saveStateToStorage(state);
+            saveStateToStorage(state);
+        }).addCase(updateCart.rejected, state => {
             state.isLoading = false;
         })
     })
 });
 
-export { addToCart, getCartItems }
+export { addToCart, getCartItems, updateCart }
 export default CartSlice.reducer
