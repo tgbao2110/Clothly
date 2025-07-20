@@ -5,14 +5,17 @@ import {
   SheetHeader,
   SheetTitle,
 } from "../ui/sheet";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../ui/button";
 import CartItem from "./cart-item";
+import { updateCart } from "@/store/customer-slices/cart-slice";
 
 const CartSheetContent = ({isCartOpen}) => {
-  const currentItems = useSelector(state => state.cart.items);
-  const [items, setItems] = useState([]);
+  const dispatch = useDispatch();
   //
+  const userId = useSelector(state => state.auth.user.id);
+  const currentItems = useSelector(state => state.cart.items); // Global state
+  const [items, setItems] = useState(currentItems); // Updated state
   useEffect(() => {
     if(isCartOpen)
         setItems(currentItems);
@@ -37,18 +40,18 @@ const CartSheetContent = ({isCartOpen}) => {
     item => item.product.stock <= 0 || item.qty > item.product.stock
   );
   //
-  // Handle Checkout
-  const handleCheckout = () => {
-    console.log("Checking out:", items);
-  };
-  //
   // Handle Update when sheet closed
   useEffect(() => {
     if (!isCartOpen && items.length > 0) {
-        console.log("Updating cart: ", items);
+      dispatch(updateCart({userId, items}))
     }
   }, [isCartOpen])
-
+  //
+  // Handle Checkout
+  const handleCheckout = () => {
+    console.log('Checking out: ',items);
+  };
+  
   return (
     <SheetContent className="flex flex-col h-full p-0">
       <SheetHeader className="border-b">
@@ -56,9 +59,9 @@ const CartSheetContent = ({isCartOpen}) => {
       </SheetHeader>
 
       <div className="flex flex-col w-full gap-4 overflow-y-auto">
-        {items.map((item) => (
+        {items.map((item,i) => (
           <CartItem
-            key={item.product._id}
+            key={i}
             item={item}
             onQtyChange={handleQtyChange}
             onDelete={handleDeleteItem}
