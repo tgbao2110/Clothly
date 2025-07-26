@@ -83,12 +83,9 @@ function App() {
               <Route path="products" element={<Listing/>}/>
               <Route path="checkout" element={<Checkout/>}/>
               <Route path="account" element={<Account/>}/>
+              {/* ==== AccessDenied ===== */}
+              <Route path="/access-denied" element = {<AccessDenied/>}/>
         </Route>
-
-        
-        {/* ==== AccessDenied ===== */}
-        <Route path="/access-denied" element = {<AccessDenied/>}/>
-
         {/* ==== NotFound ===== */}
         <Route path="*" element = {<NotFound/>}/>
       </Routes>
