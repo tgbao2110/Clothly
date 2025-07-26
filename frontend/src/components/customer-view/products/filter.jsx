@@ -1,7 +1,7 @@
 import { filterOptions } from "@/config"
-import { Label } from "../ui/label"
-import { Checkbox } from "../ui/checkbox"
-import { Separator } from "../ui/separator"
+import { Label } from "@/components/ui/label"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Separator } from "@/components/ui/separator"
 
 const ProductFilter = ({filters, handleFilter}) => {
   return (

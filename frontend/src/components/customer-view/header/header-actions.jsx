@@ -11,13 +11,13 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Button } from "../ui/button"
-import { Avatar, AvatarFallback } from "../ui/avatar"
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
 import { logoutUser } from "@/store/auth-slice"
-import { Sheet, SheetTrigger } from "../ui/sheet";
-import CartSheetContent from "./cart";
+import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+import CartSheetContent from "../cart/cart";
 import { useState } from "react";
 
 const CustomerHeaderActions = () => {

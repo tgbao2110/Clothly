@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
 import { Trash2 } from "lucide-react";
 
 const CartItem = ({ item, onQtyChange, onDelete }) => {

@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useSearchParams } from "react-router-dom"
 
 import { filterOptions, sortOptions } from "@/config"
-import ProductFilter from "@/components/customer-view/filter"
-import CustomerProductTile from "@/components/customer-view/product-tile"
+import ProductFilter from "@/components/customer-view/products/filter"
+import CustomerProductTile from "@/components/customer-view/products/product-tile"
 import { getFilteredProducts } from "@/store/customer-slices/products-slice"
 
 import { Button } from "@/components/ui/button"
@@ -14,7 +14,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenu
 
 const Listing = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams();
   const products = useSelector(state => state.customerProducts.products)
   const [filters, setFilters] = useState({});

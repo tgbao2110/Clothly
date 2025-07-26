@@ -4,9 +4,9 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-} from "../ui/sheet";
+} from "../../ui/sheet";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import CartItem from "./cart-item";
 import { updateCart } from "@/store/customer-slices/cart-slice";
 
