@@ -1,4 +1,5 @@
-import { Banner } from "../../models/Banner";
+import { Banner } from "../../models/Banner.js";
+import { imageDeleteUtil } from "../../helpers/cloudinary.js"
 //
 //
 // CREATE
@@ -51,7 +52,7 @@ const deleteBanner = async(req, res) => {
         {
             res.status(404).json({
                 success: false,
-                message: "Banner not found"
+                message: `Banner ${id} not found`
             })
             return
         }

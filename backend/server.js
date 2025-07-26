@@ -41,7 +41,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use('/api/auth', authRouter);
 app.use('/api/admin/product', adminProductsRouter);
-app.user('/api/admin/banner', adminBannerRoutes);
+app.use('/api/admin/banner', adminBannerRoutes);
 app.use('/api/customer/product', customerProductsRouter);
 app.use('/api/cart', cartRouter);
 

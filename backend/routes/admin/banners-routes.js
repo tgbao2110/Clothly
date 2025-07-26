@@ -9,6 +9,6 @@ const router = express.Router();
 
 router.post('/', createBanner);
 router.get('/', getAllBanners);
-router.delete('/', deleteBanner);
+router.delete('/:id', deleteBanner);
 
 export {router as adminBannerRoutes}
