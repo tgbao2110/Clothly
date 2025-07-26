@@ -4,6 +4,8 @@ import AccessDenied from "./pages/access-denied";
 import { Toaster } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 
+import ScrollToTop from "./components/common/scroll-to-top";
+
 import AuthLayout from "./components/_auth/layout";
 import Login from "./pages/_auth/login";
 import Register from "./pages/_auth/register";
@@ -47,6 +49,7 @@ function App() {
   return (
     <div className="flex flex-col overflow-hidden bg-white">
       <Toaster/>
+      <ScrollToTop/>
       <Routes>
         {/* ==== Auth Routes ===== */}
         <Route path="/auth" element={
