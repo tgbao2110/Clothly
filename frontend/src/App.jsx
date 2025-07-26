@@ -80,7 +80,7 @@ function App() {
         }>
               <Route path="" element={<Home/>}/>
               <Route path="/product/:id" element={<Product/>}/>
-              <Route path="listing" element={<Listing/>}/>
+              <Route path="products" element={<Listing/>}/>
               <Route path="checkout" element={<Checkout/>}/>
               <Route path="account" element={<Account/>}/>
         </Route>

@@ -16,7 +16,7 @@ const CustomerHeader = () => {
     <header className="sticky top-0 z-40 w-full border-b">
       <div className="flex justify-between items-center h-16 px-4 md:px-6">
         {/* ==== Logo ==== */}
-        <Link to={"/shop"} className="hidden lg:flex flex-row gap-2 items-center">
+        <Link to={"/"} className="hidden lg:flex flex-row gap-2 items-center">
           <ShoppingBag />
           <span className="text-lg font-bold">Clothly</span>
         </Link>

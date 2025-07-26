@@ -7,26 +7,26 @@ export const customerHeaderMenuItems = [
     {
         id: 'men',
         label: 'Men',
-        path: '/listing'
+        path: '/products?categories=men'
     },
     {
         id: 'women',
         label: 'Women',
-        path: '/listing'
+        path: '/products?categories=women'
     },
     {
         id: 'kids',
         label: 'Kids',
-        path: '/listing'
+        path: '/products?categories=kids'
     },
     {
         id: 'accessories',
         label: 'Accessories',
-        path: '/listing'
+        path: '/products?categories=accessories'
     },
     {
         id: 'footwear',
         label: 'Footwear',
-        path: '/listing'
+        path: '/products?categories=footwear'
     },
 ]

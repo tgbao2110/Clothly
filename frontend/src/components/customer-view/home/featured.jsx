@@ -35,7 +35,7 @@ const HomeFeatured = () => {
         ))}
       </div>
       <div className="flex flex-row justify-center md:justify-end">
-        <Button onClick={() => navigate('/listing')}>
+        <Button onClick={() => navigate('/products')}>
           View All
           <ChevronRight/>
         </Button>
