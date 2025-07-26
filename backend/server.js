@@ -6,6 +6,7 @@ import express from "express";
 
 import { authRouter } from "./routes/auth/auth-routes.js";
 import { adminProductsRouter } from "./routes/admin/products-routes.js";
+import { adminBannerRoutes } from "./routes/admin/banners-routes.js";
 import { customerProductsRouter } from "./routes/customer/product-routes.js";
 import { cartRouter } from "./routes/customer/cart-routes.js";
 
@@ -40,6 +41,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use('/api/auth', authRouter);
 app.use('/api/admin/product', adminProductsRouter);
+app.user('/api/admin/banner', adminBannerRoutes);
 app.use('/api/customer/product', customerProductsRouter);
 app.use('/api/cart', cartRouter);
 
