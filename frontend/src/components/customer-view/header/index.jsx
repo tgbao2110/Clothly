@@ -1,11 +1,15 @@
-import { Menu, ShoppingBag } from "lucide-react"
+import { useState } from "react"
 import { Link } from "react-router-dom"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { Button } from "@/components/ui/button"
 import { useSelector } from "react-redux"
+
+import { Menu, ShoppingBag } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+
 import CustomerHeaderMenuItems from "./header-menu-items"
 import CustomerHeaderActions from "./header-actions"
-import { useState } from "react"
+import CustomerHeaderAuthActions from "./header-auth-actions"
 
 const CustomerHeader = () => {
 
@@ -46,7 +50,7 @@ const CustomerHeader = () => {
         </div>
 
         {/* ==== Logout ==== */}
-        {isAuthenticated ? <CustomerHeaderActions/> : <div>Login</div>}
+        {isAuthenticated ? <CustomerHeaderActions/> : <CustomerHeaderAuthActions/>}
 
         
       </div>
