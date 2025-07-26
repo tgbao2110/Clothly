@@ -13,9 +13,9 @@ export const adminSidebarMenuItems = [
     icon: <Shirt size={18}/>
   },
   {
-    id: "features",
-    label: "Features",
-    path: "/admin/features",
+    id: "banners",
+    label: "Banners",
+    path: "/admin/banners",
     icon: <GalleryVertical size={18}/>
   },
  {

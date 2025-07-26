@@ -98,6 +98,8 @@ const AdminProductSlices = createSlice({
         // ImageUpload states
         builder.addCase(uploadImage.pending, (state) => {
             state.isLoading = true;
+          }).addCase(uploadImage.fulfilled, (state) => {
+            state.isLoading = false;
           }).addCase(uploadImage.rejected, (state) => {
             state.isLoading = false;
           } )

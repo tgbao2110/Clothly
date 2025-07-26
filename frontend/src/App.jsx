@@ -14,7 +14,7 @@ import AdminLayout from "./components/admin-view/layout";
 import AdminDashboard from "./pages/admin-view/dashboard";
 import AdminProducts from "./pages/admin-view/products";
 import AdminOrders from "./pages/admin-view/orders";
-import AdminFeatures from "./pages/admin-view/features";
+import AdminBanners from "./pages/admin-view/banners";
 
 import CustomerLayout from "./components/customer-view/layout";
 import Home from "./pages/customer-view/home";
@@ -71,7 +71,7 @@ function App() {
               <Route path="dashboard" element={<AdminDashboard/>}/>
               <Route path="products" element={<AdminProducts/>}/>
               <Route path="orders" element={<AdminOrders/>}/>
-              <Route path="features" element={<AdminFeatures/>}/>
+              <Route path="banners" element={<AdminBanners/>}/>
         </Route>
 
 

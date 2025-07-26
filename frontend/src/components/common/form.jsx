@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label"
@@ -21,6 +22,15 @@ const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText})
             [control.name]: newValue,
         });
     };
+
+    const isLoading = useSelector(
+      state => (
+        state.auth.isLoading ||
+        state.adminProducts.isLoading ||
+        state.adminBanners.isLoading
+      )
+    );
+
 
     const isFormFilled = () => {
       return Object.values(formData)
@@ -114,7 +124,7 @@ const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText})
         </div>
         
         {/* ===== Button ===== */}
-        <Button disabled={!isFormFilled()} type='submit' className="mt-5" >
+        <Button disabled={!isFormFilled() || isLoading} type='submit' className="mt-5" >
             {buttonText || 'Submit'}
         </Button>
     </form>
