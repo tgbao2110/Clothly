@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { Star } from "lucide-react";
 
@@ -7,20 +9,22 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { useDispatch, useSelector } from "react-redux";
-import { getProductById } from "@/store/customer-slices/products-slice";
-import { useParams } from "react-router-dom";
 import { toast } from "sonner";
+
+import { getProductById } from "@/store/customer-slices/products-slice";
 import { addToCart } from "@/store/customer-slices/cart-slice";
 
 const Product = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
     const dispatch = useDispatch();
     const id = useParams().id;
     const [product, setProduct] = useState(null)
     const [isOutOfStock, setIsOutOfStock] = useState(true);
     const [qty, setQty] = useState(1);
     const isLoading = useSelector(state => state.customerProducts.isLoading);
-    const userId = useSelector(state => state.auth.user.id)
+    const {user, isAuthenticated} = useSelector(state=>state.auth);
+    const currentPath = location.pathname;
 
     // Fetch product details
     useEffect(()=> {
@@ -39,7 +43,11 @@ const Product = () => {
     const handleAddToCart = e => {
       e.preventDefault();
 
-      dispatch(addToCart({userId, productId: id, qty}))
+      if (!isAuthenticated) {
+        navigate(`/auth/login?redirect=${currentPath}`);
+      }
+
+      dispatch(addToCart({userId: user?.id, productId: id, qty}))
       .then(action => {
         if(action.payload?.success){
           console.log('Added to cart', action.payload);

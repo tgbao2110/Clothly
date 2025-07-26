@@ -1,6 +1,6 @@
 import { useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { Link, useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 import { toast } from "sonner"
 
 import CommonForm from "@/components/common/form"
@@ -14,8 +14,11 @@ const Login = () => {
     password: "",
   };
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState(initState);
+  const redirectPath = new URLSearchParams(location.search).get("redirect") || "/";
+
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -27,11 +30,11 @@ const Login = () => {
       // Handle success
       if(action?.payload?.success) {
         toast.success(action?.payload?.message);
-        console.log(`getcartitems(${action.payload.user.id})`)
         dispatch(getCartItems(action?.payload?.user.id))
+
         if(action?.payload?.user.role === 'admin')
           navigate('/admin/');
-        else navigate('/');
+        else navigate(redirectPath);
       }
       //
       // Handle server error
