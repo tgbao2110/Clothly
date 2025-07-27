@@ -10,11 +10,11 @@ Customers browse, filter, add to cart, checkout, and manage their profile.
 
 ## Built-In Accounts
 
-  # Admin
+  ### Admin
     Email: admin@gmail.com
     Password: 21102003
 
-  # Customer
+  ### Customer
     Email: tranb6778@gmail.com
     Password: 21102003
 
@@ -34,8 +34,6 @@ Customers browse, filter, add to cart, checkout, and manage their profile.
 | Patterns & Sync  | Config-driven UI, Optimistic UI (state first, API on submit)    |
 
 ---
-
-## Tech Stack
 
 ## Features
 
@@ -81,7 +79,7 @@ Customers browse, filter, add to cart, checkout, and manage their profile.
    cd ecommerce-clothing
 
 2. Create .env files in /server and /client
-  # backend/.env
+  ### backend/.env
   SERVER_PORT=<port>
   MONGODB_URI=<your-mongodb-uri>
   JWT_SECRET=<your-jwt-secret>
@@ -89,15 +87,15 @@ Customers browse, filter, add to cart, checkout, and manage their profile.
   CLOUDINARY_API_KEY=<key>
   CLOUDINARY_API_SECRET=<secret>
 
-  # frontend/.env
+  ### frontend/.env
   VITE_API_URL=http://localhost:<port>/api
 
 3. Install dependencies and start servers:
-  # In backend/
+  ### In backend/
   npm install
   npm run dev
 
-  # In frontend/
+  ### In frontend/
   npm install
   npm run dev
 
