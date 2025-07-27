@@ -1,19 +1,20 @@
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 
 const CustomerHeaderAuthActions = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const currentPath = useLocation().pathname;
   return (
     <div className="flex flex-row gap-2">
       <Button
         variant={"outline"}
-        onClick={() => navigate('/auth/register')}
+        onClick={() => navigate(`/auth/register?redirect=${currentPath}`)}
       >
         Register
       </Button>
 
       <Button
-        onClick={() => navigate('/auth/login')}
+        onClick={() => navigate(`/auth/login?redirect=${currentPath}`)}
       >
         Login
       </Button>

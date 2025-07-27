@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { toast } from "sonner"
 
 import CommonForm from "@/components/common/form"
@@ -18,6 +18,9 @@ const Register = () => {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState(initState);
 
+  const [searchParams] = useSearchParams();
+  const redirectPath = searchParams.get("redirect") || "/";
+
   const onSubmit = (e) => {
     e.preventDefault();
     //
@@ -29,7 +32,7 @@ const Register = () => {
       // Handle success
       if(action?.payload?.success) {
         toast.success(action?.payload?.message);
-        navigate('/auth/login');
+        navigate(`/auth/login?redirect=${redirectPath}`);
       }
       //
       // Handle server error
@@ -51,7 +54,7 @@ const Register = () => {
         <p className="mt-2">
           Already have an account?
           <Link 
-            to='/auth/login'
+            to={`/auth/login?redirect=${redirectPath}`}
             className="ml-1 text-primary font-medium hover:underline underline-offset-2"
           >
             Login
@@ -66,6 +69,9 @@ const Register = () => {
         setFormData={setFormData}
         onSubmit={onSubmit}
         buttonText={"Sign Up"}
+        hasCancel={true}
+        cancelText={"Back"}
+        onCancel={() => navigate(redirectPath)}
       />
 
     </div>

@@ -11,6 +11,17 @@ const CheckAuth = ({ isAuthenticated, user, children }) => {
     return <Navigate to="/auth/login" />;
   }
 
+  // Not authed && in account, checkout pages
+   if (
+    !isAuthenticated &&
+    (
+      location.pathname.includes("/account") ||
+      location.pathname.includes("/checkout")
+    )
+  ) {
+    return <Navigate to="/auth/login" />;
+  }
+
   //
   //Authed && in auth pages => navigate to home
   if (

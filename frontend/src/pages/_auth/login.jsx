@@ -21,8 +21,6 @@ const Login = () => {
   const [searchParams] = useSearchParams();
   const redirectPath = searchParams.get("redirect") || "/";
 
-
-
   const onSubmit = (e) => {
     e.preventDefault();
     //
@@ -56,7 +54,7 @@ const Login = () => {
         <p className="mt-2">
           Haven't had an account yet?
           <Link 
-            to='/auth/register'
+            to={`/auth/register?redirect=${redirectPath}`}
             className="ml-1 text-primary font-medium hover:underline underline-offset-2"
           >
             Register
@@ -70,6 +68,9 @@ const Login = () => {
         setFormData={setFormData}
         onSubmit={onSubmit}
         buttonText={"Login"}
+        hasCancel={true}
+        cancelText={"Back"}
+        onCancel={() => navigate(redirectPath)}
       />
     </div>
   )

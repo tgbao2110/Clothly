@@ -49,7 +49,7 @@ const CustomerHeader = () => {
           <CustomerHeaderMenuItems/>
         </div>
 
-        {/* ==== Logout ==== */}
+        {/* ==== Actions ==== */}
         {isAuthenticated ? <CustomerHeaderActions/> : <CustomerHeaderAuthActions/>}
 
         
