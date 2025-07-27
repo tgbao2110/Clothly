@@ -4,7 +4,7 @@ import adminProductsReducer from './admin-slices/products-slice'
 import adminBannersReducer from './admin-slices/banners-slice'
 import customerProductsReducer from './customer-slices/products-slice'
 import cartReducer from './customer-slices/cart-slice'
-
+import addressReducer from './customer-slices/address-slice'
 
 const store = configureStore ({
     reducer: {
@@ -13,6 +13,7 @@ const store = configureStore ({
         adminBanners: adminBannersReducer,
         customerProducts: customerProductsReducer,
         cart: cartReducer,
+        address: addressReducer,
     }
 })
 
