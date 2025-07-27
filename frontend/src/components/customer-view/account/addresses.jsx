@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { toast } from "sonner"
 
@@ -11,6 +11,7 @@ import { createAddress, updateAddress } from "@/store/customer-slices/address-sl
 import AddressCard from "./adressCard"
 import { Button } from "@/components/ui/button"
 import { ArrowDown } from "lucide-react"
+import scrollTo from "@/lib/scroll"
 
 const AccountAddress = () => {
   const dispatch = useDispatch();
@@ -28,6 +29,10 @@ const AccountAddress = () => {
   }
 
   const [formData, setFormData] = useState(initState);
+
+  useEffect(()=> {
+    scrollTo()
+  },[addresses])
 
   // Create
   const handleCreate = (e) => {
@@ -54,10 +59,7 @@ const AccountAddress = () => {
     setFormData(currentData);
     setCurrentId(id);
     setIsUpdateMode(true);
-    window.scrollTo({
-      top:300,
-      behavior: "smooth",
-    });
+    scrollTo({top: 300});
   }
   const handleUpdate = (e) => {
     e.preventDefault();
@@ -96,10 +98,7 @@ const AccountAddress = () => {
               <p>You haven't added any address</p>
               <Button onClick={e => {
                   e.preventDefault();
-                  window.scrollTo({
-                    top:200,
-                    behavior: "smooth",
-                  });
+                  scrollTo({top: 200});
                 }}>Add one now <ArrowDown/>
               </Button>
             </div>:
