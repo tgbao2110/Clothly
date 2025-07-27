@@ -1,15 +1,21 @@
 import HomeBanner from "@/components/customer-view/home/banner";
 import HomeFeatured from "@/components/customer-view/home/featured";
-
-const slides = [
-  "https://res.cloudinary.com/dxpkpxyme/image/upload/v1753523602/7933269_js7n1k.jpg",
-  "https://res.cloudinary.com/dxpkpxyme/image/upload/v1753524355/7933269_wkrlvk.jpg"
-];
+import { getAllBanners } from "@/store/admin-slices/banners-slice";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const Home = () => {
+  
+  const dispatch = useDispatch();
+  const banners = useSelector(state => state.adminBanners.banners);
+
+  useEffect(() => {
+    dispatch(getAllBanners())
+  }, [dispatch])
+
   return (
     <div>
-      <HomeBanner slides={slides}/>
+      <HomeBanner slides={banners}/>
       <HomeFeatured/>
     </div>
   );

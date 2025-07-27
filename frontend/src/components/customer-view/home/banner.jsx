@@ -2,17 +2,16 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const HomeBanner = ({slides}) => {
-  
   const [currentSlide, setCurrentSlide] = useState(0);
   //
-  //Auto transition every 2s
+  //Auto transition
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 2000); // or keep your 1000ms
+    }, 2500);
 
     return () => clearInterval(interval);
-  }, [currentSlide]);
+  }, [slides.length]);
   //
   // Previous
   const prevSlide = () => {
@@ -29,7 +28,7 @@ const HomeBanner = ({slides}) => {
       {slides.map((slide, i) => (
         <img
           key={i}
-          src={slide}
+          src={slide.image}
           alt={`slide-${i}`}
           className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1500 ${
             currentSlide === i ? "opacity-100" : "opacity-0"
