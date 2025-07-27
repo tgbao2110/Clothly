@@ -2,7 +2,7 @@ import { Address } from "../../models/Address.js";
 
 const createAddress = async(req, res) => {
   try {
-    const newAddress = res.body;
+    const newAddress = new Address(req.body);
     // Validate
     if (
       !(
