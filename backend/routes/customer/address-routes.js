@@ -13,4 +13,4 @@ router.get('/:userId', getAllAddresses);
 router.put('/:userId/:addressId', updateAddress)
 router.delete('/:userId/:addressId', deleteAddress);
 
-export {router as addressRoutes}
+export {router as addressRouter}
