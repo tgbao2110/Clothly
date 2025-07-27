@@ -15,14 +15,12 @@ const saveStateToStorage = state => {
 // POST addToCart thunk
 const addToCart = createAsyncThunk('/cart/add',
   async({userId, productId, qty}, thunkAPI) => {
-    console.log (`Adding product "${productId}" with qty "${qty}" to user "${userId}"`)
     try {
         const res = await api.post('/cart',{userId, productId, qty}, {
             headers: {
                 "Content-Type": "application/json"
             }
         });
-        console.log ("ADD RETURNS: ", res.data)
         return res.data;
     } catch (error) {
         return thunkAPI.rejectWithValue(error.response.data);

@@ -8,7 +8,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../../ui/button";
 import CartItem from "./cart-item";
-import { updateCart } from "@/store/customer-slices/cart-slice";
+import { deleteAllItems, updateCart } from "@/store/customer-slices/cart-slice";
 import { useNavigate } from "react-router-dom";
 
 const CartSheetContent = ({isCartOpen, setIsCartOpen}) => {
@@ -47,6 +47,9 @@ const CartSheetContent = ({isCartOpen, setIsCartOpen}) => {
     if (!isCartOpen && items.length > 0) {
       dispatch(updateCart({userId, items}))
     }
+    if (!isCartOpen && items.length <= 0) {
+      dispatch(deleteAllItems(userId))
+    }
   }, [isCartOpen])
   //
   // Total Price
@@ -77,6 +80,8 @@ const CartSheetContent = ({isCartOpen, setIsCartOpen}) => {
         ))}
       </div>
 
+    {
+      items.length > 0 &&
       <SheetFooter className="sticky bottom-0 border-t px-4 py-4 z-10">
         <div className="space-y-4">
           <div className="flex flex-row justify-between">
@@ -95,6 +100,7 @@ const CartSheetContent = ({isCartOpen, setIsCartOpen}) => {
           </Button>
         </div>
       </SheetFooter>
+    }
     </SheetContent>
   );
 };
