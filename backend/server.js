@@ -9,6 +9,7 @@ import { adminProductsRouter } from "./routes/admin/products-routes.js";
 import { adminBannerRoutes } from "./routes/admin/banners-routes.js";
 import { customerProductsRouter } from "./routes/customer/product-routes.js";
 import { cartRouter } from "./routes/customer/cart-routes.js";
+import { addressRouter } from "./routes/customer/address-routes.js";
 
 dotenv.config()
 
@@ -44,5 +45,6 @@ app.use('/api/admin/product', adminProductsRouter);
 app.use('/api/admin/banner', adminBannerRoutes);
 app.use('/api/customer/product', customerProductsRouter);
 app.use('/api/cart', cartRouter);
+app.use('/api/address', addressRouter);
 
 app.listen(port, () => {console.log("Server is running on port ",port)});
