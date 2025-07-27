@@ -9,16 +9,16 @@ const initialState = {
 // POST createAddress thunk
 const createAddress = createAsyncThunk('/address/create',
     async (formData, thunkAPI) => {
-        try {
-            const res = await api.post("/admin/address/", formData, {
-              headers: {
-                "Content-Type": "application/json"
-              }
-            });
-            return res.data;
-        } catch (error) {
-            return thunkAPI.rejectWithValue(error.response?.data);
-        }
+      try {
+        const res = await api.post("/address/", formData, {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+        return res.data;
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data);
+      }
     }
 )
 
@@ -26,7 +26,7 @@ const createAddress = createAsyncThunk('/address/create',
 const getAllAddresses = createAsyncThunk('/address/get-all',
   async (userId, thunkAPI) => {
       try {
-          const res = await api.get(`/admin/address/${userId}`);
+          const res = await api.get(`/address/${userId}`);
           return res.data;
       } catch (error) {
           return thunkAPI.rejectWithValue(error.response?.data);
@@ -38,7 +38,7 @@ const getAllAddresses = createAsyncThunk('/address/get-all',
 const updateAddress = createAsyncThunk('/address/update',
   async ({ userId, addressId, formData }, thunkAPI) => {
       try {
-          const res = await api.put(`/admin/address/${userId}/${addressId}`,
+          const res = await api.put(`/address/${userId}/${addressId}`,
             formData, {
               headers: {
                 "Content-Type": "application/json"
@@ -55,7 +55,7 @@ const updateAddress = createAsyncThunk('/address/update',
 const deleteAddress = createAsyncThunk('address/delete',
   async ({userId, addressId}, thunkAPI) => {
     try {
-      const res = await api.delete(`/admin/address/${userId}/${addressId}`)
+      const res = await api.delete(`/address/${userId}/${addressId}`)
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data)

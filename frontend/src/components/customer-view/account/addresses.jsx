@@ -2,9 +2,15 @@ import CommonForm from "@/components/common/form"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { createAddressForm } from "@/config/create-address"
+import { createAddress } from "@/store/customer-slices/address-slice"
 import { useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { toast } from "sonner"
 
 const AccountAddress = () => {
+  const dispatch = useDispatch();
+  const userId = useSelector(state => state.auth.user.id);
+
   const initState = {
     phone: '',
     city: '',
@@ -17,7 +23,18 @@ const AccountAddress = () => {
 
   const handleCreate = (e) => {
     e.preventDefault();
-    console.log('Submitting: ', formData)
+    const finalData = {...formData, userId: userId}
+    dispatch(createAddress(finalData))
+    .then(action => {
+      console.log(action.payload.message)
+      if(action?.payload?.success)
+      {
+        toast.success(action.payload?.message);
+        setFormData(initState);
+      }
+      else
+        toast.error(action.payload?.message);
+    })
   }
 
   return (
