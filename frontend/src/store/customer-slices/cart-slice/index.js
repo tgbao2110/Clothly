@@ -58,6 +58,18 @@ const updateCart = createAsyncThunk('/cart/update',
     }
 )
 
+// DELETE deleteAllItems thunk
+const deleteAllItems = createAsyncThunk('/cart/delete-all',
+    async(userId, thunkAPI) => {
+        try {
+            const res = await api.delete(`/cart/all/${userId}`);
+            return res.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+)
+
 ///// Slice /////
 const CartSlice = createSlice({
     name: 'cart',
@@ -97,8 +109,19 @@ const CartSlice = createSlice({
         }).addCase(updateCart.rejected, state => {
             state.isLoading = false;
         })
+        // updateCart states
+        builder.addCase(deleteAllItems.pending, state => {
+            state.isLoading = true;
+        }).addCase(deleteAllItems.fulfilled, state => {
+            state.isLoading = false;
+            state.items = [];
+            state.itemsCount = 0;
+            saveStateToStorage(state);
+        }).addCase(deleteAllItems.rejected, state => {
+            state.isLoading = false;
+        })
     })
 });
 
-export { addToCart, getCartItems, updateCart }
+export { addToCart, getCartItems, updateCart, deleteAllItems }
 export default CartSlice.reducer

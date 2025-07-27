@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -7,11 +7,16 @@ import { Button } from "@/components/ui/button";
 import CartItem from "@/components/customer-view/cart/cart-item";
 import AddressCard from "@/components/customer-view/account/adressCard";
 import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
+import { deleteAllItems } from "@/store/customer-slices/cart-slice";
 
 const Checkout = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const cartItems = useSelector((state) => state.cart.items);
   const addresses = useSelector((state) => state.address.addresses);
+  const userId = useSelector((state) => state.auth.user.id)
 
   const [selectedAddress, setSelectedAddress] = useState(addresses[0] || null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -31,6 +36,13 @@ const Checkout = () => {
     (sum, item) => sum + item.product.salePrice * item.qty,
     0
   );
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(deleteAllItems(userId))
+    .then(action => console.log(action.payload))
+    toast.success('Order placed')
+  }
 
   return (
     <div className="max-w-5xl mx-auto py-10 px-6 space-y-10">
@@ -136,6 +148,7 @@ const Checkout = () => {
       <Button
         disabled={!selectedAddress || cartItems.length === 0}
         className="w-full mt-5"
+        onClick={handleSubmit}
       >
         Place Order
       </Button>
