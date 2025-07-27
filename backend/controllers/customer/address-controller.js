@@ -13,7 +13,7 @@ const createAddress = async(req, res) => {
         newAddress.phone
       )
     ) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         message: "Missing required input. Please re-check the fields",
       });
@@ -41,7 +41,7 @@ const getAllAddresses = async(req, res) => {
     const {userId} = req.params;
     // Validate user
     if (!userId) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         message: "Invalid user",
       });
@@ -70,20 +70,23 @@ const updateAddress = async(req, res) => {
     const updatedAddress = req.body; 
     // Validate
     if (!userId) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         message: "Invalid user",
       });
     }
     if (!addressId) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         message: "Invalid address",
       });
     }
+    console.log('updateWith: ', updatedAddress)
+    console.log('userId: ', userId)
+    console.log('addressId: ', addressId)
     //
     // Find
-    const foundAddress = Address.findOne({_id: addressId, userId})
+    const foundAddress = await Address.findOne({_id: addressId, userId})
     //
     if (!foundAddress) {
         return res.status(404).json({
@@ -91,6 +94,7 @@ const updateAddress = async(req, res) => {
             message: "Address not found"
         })
     }
+    console.log('foundInDB: ', foundAddress)
     //
     // Update
     Object.keys(updatedAddress).forEach((key) => {
@@ -121,11 +125,10 @@ const deleteAddress = async(req, res) => {
     //
     // Validate
     if (!address) {
-      res.status(404).json({
+      return res.status(404).json({
         success: false,
         message: "Address not found",
       });
-      return;
     }
     //
     // Success
