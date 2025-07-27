@@ -2,8 +2,12 @@ import api from "@/lib/api"
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-    isLoading: false,
-    addresses: []
+  isLoading: false,
+  addresses: JSON.parse(localStorage.getItem("addresses")) || []
+}
+
+const saveStateToStorage = state => {
+  localStorage.setItem("addresses", JSON.stringify(state.addresses));
 }
 
 // POST createAddress thunk
@@ -77,6 +81,7 @@ const AddressSlices = createSlice({
           }).addCase(createAddress.fulfilled, (state, action) => {
             state.isLoading = false;
             state.addresses.push(action.payload.data);
+            saveStateToStorage(state);
           }).addCase(createAddress.rejected, (state) => {
             state.isLoading = false;
           });
@@ -87,6 +92,7 @@ const AddressSlices = createSlice({
         }).addCase(getAllAddresses.fulfilled, (state, action) => {
           state.isLoading = false;
           state.addresses = action.payload.data;
+          saveStateToStorage(state);
         }).addCase(getAllAddresses.rejected, state => {
           state.isLoading = false;
         })
@@ -98,6 +104,7 @@ const AddressSlices = createSlice({
           state.isLoading = false;
           const i = state.addresses.findIndex(a => a._id === action.payload.data._id)
           if (i !== -1) state.addresses[i] = action.payload.data;
+          saveStateToStorage(state);
         }).addCase(updateAddress.rejected, state => {
           state.isLoading = false;
         })
@@ -109,6 +116,7 @@ const AddressSlices = createSlice({
           state.isLoading = false;
           const i = state.addresses.findIndex(a => a._id === action.payload.data._id);
           if (i !== -1) state.addresses.splice(i,1);
+          saveStateToStorage(state);
         }).addCase(deleteAddress.rejected, (state) => {
           state.isLoading = false;
         })

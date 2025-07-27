@@ -94,7 +94,6 @@ const CartSlice = createSlice({
             state.items = action.payload.data;
             state.itemsCount = action.payload.data.length;
             saveStateToStorage(state);
-            saveStateToStorage(state);
         }).addCase(updateCart.rejected, state => {
             state.isLoading = false;
         })
