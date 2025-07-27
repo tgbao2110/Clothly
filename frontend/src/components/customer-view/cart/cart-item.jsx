@@ -10,7 +10,7 @@ const CartItem = ({ item, onQtyChange, onDelete }) => {
   const isOverBuying = qty > product.stock;
 
   useEffect(() => {
-    onQtyChange(product._id, qty);
+    onQtyChange?.(product._id, qty);
   }, [qty]);
 
   const handleQtyUpdate = (value) => {
@@ -58,26 +58,34 @@ const CartItem = ({ item, onQtyChange, onDelete }) => {
         </div>
 
         {/* === Right section === */}
-        <div className="flex flex-row items-center gap-2">
-          <Input
-            name="quantity"
-            type="number"
-            value={qty}
-            disabled={isOutOfStock}
-            min={1}
-            max={product.stock}
-            step={1}
-            onKeyDown={(e) => e.preventDefault()}
-            onChange={(e) => handleQtyUpdate(e.target.value)}
-            className={`w-16 ${
-              isOutOfStock ? "cursor-not-allowed opacity-50" : ""
-            }`}
-          />
-          <Trash2
-            className="w-5 h-5 text-muted-foreground hover:text-destructive cursor-pointer"
-            onClick={handleDelete}
-          />
-        </div>
+        {
+          onQtyChange && handleDelete ?
+          // If handlers exist => Render input and delete button
+          <div className="flex flex-row items-center gap-2">
+            <Input
+              name="quantity"
+              type="number"
+              value={qty}
+              disabled={isOutOfStock}
+              min={1}
+              max={product.stock}
+              step={1}
+              onKeyDown={(e) => e.preventDefault()}
+              onChange={(e) => handleQtyUpdate(e.target.value)}
+              className={`w-16 ${
+                isOutOfStock ? "cursor-not-allowed opacity-50" : ""
+              }`}
+            />
+            <Trash2
+              className="w-5 h-5 text-muted-foreground hover:text-destructive cursor-pointer"
+              onClick={handleDelete}
+            />
+          </div> :
+          // Else => Render quantity - Readonly
+          <div className="text-sm text-muted-foreground lg:min-w-[120px] text-end">
+            {`Qty: ${qty}`}
+          </div>
+        }
       </div>
 
       {/* === Warning === */}

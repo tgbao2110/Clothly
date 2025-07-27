@@ -1,8 +1,8 @@
-import { Card, CardAction, CardContent, CardFooter } from "@/components/ui/card"
+import { Card, CardAction, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator";
 import { Pencil, Trash2 } from "lucide-react";
 
-const AddressCard = ({address, handleUpdate, handleDelete}) => {
+const AddressCard = ({address, handleUpdate = null, handleDelete = null}) => {
   const{address: detailedAddress, city, zipCode, phone, _id} = address;
   return (
     <Card>
@@ -25,19 +25,23 @@ const AddressCard = ({address, handleUpdate, handleDelete}) => {
           {phone}
         </div>
       </CardContent>
-
-      <div className="px-6">
-        <Separator/>
-      </div>
       
-      <CardFooter className="flex flex-row gap-1 mt-[-5px] text-muted-foreground">
-        <Pencil className="size-5 cursor-pointer hover:text-primary"
-          onClick={e => handleUpdate(e, _id)}
-        />
-        <Trash2 className="size-5 cursor-pointer hover:text-destructive"
-          onClick={e => handleDelete(e, _id)}
-        />
-      </CardFooter>
+      { handleUpdate && handleDelete && (
+        <>
+        <div className="px-6">
+          <Separator/>
+        </div>
+
+        <CardFooter className="flex flex-row gap-1 mt-[-5px] text-muted-foreground">
+          <Pencil className="size-5 cursor-pointer hover:text-primary"
+            onClick={e => handleUpdate(e, _id)}
+          />
+          <Trash2 className="size-5 cursor-pointer hover:text-destructive"
+            onClick={e => handleDelete(e, _id)}
+          />
+        </CardFooter>
+        </>
+      )}
     </Card>
   )
 }

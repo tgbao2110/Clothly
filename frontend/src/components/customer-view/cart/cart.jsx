@@ -9,9 +9,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../../ui/button";
 import CartItem from "./cart-item";
 import { updateCart } from "@/store/customer-slices/cart-slice";
+import { useNavigate } from "react-router-dom";
 
-const CartSheetContent = ({isCartOpen}) => {
+const CartSheetContent = ({isCartOpen, setIsCartOpen}) => {
   const dispatch = useDispatch();
+  const navigate  = useNavigate();
   //
   const userId = useSelector(state => state.auth.user.id);
   const currentItems = useSelector(state => state.cart.items); // Global state
@@ -54,7 +56,8 @@ const CartSheetContent = ({isCartOpen}) => {
   //
   // Handle Checkout
   const handleCheckout = () => {
-    console.log('Checking out: ',items);
+    navigate(`/checkout`);
+    setIsCartOpen(false);
   };
   
   return (

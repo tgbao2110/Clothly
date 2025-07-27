@@ -5,9 +5,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import AccountAddress from "@/components/customer-view/account/addresses";
 import AccountOrders from "@/components/customer-view/account/orders";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import scrollTo from "@/lib/scroll";
 
 const Account = () => {
   const user = useSelector(state => state.auth.user);
+  const defaultTab = useLocation().state?.defaultTab || null;  
+
+  useEffect(() => {
+    if(defaultTab === 'addresses')
+      scrollTo({top:200})
+  }, []);
+
   return (
     <div className="flex flex-col p-16 gap-8">
       {/* ==== Avt & Name ==== */}
@@ -28,7 +38,7 @@ const Account = () => {
       </div>
 
       {/* ==== Orders & Addresses ==== */}
-      <Tabs defaultValue='orders'>
+      <Tabs defaultValue={ defaultTab || 'orders' }>
         <TabsList>
           <TabsTrigger value='orders'>Orders</TabsTrigger>
           <TabsTrigger value='addresses'>Addresses</TabsTrigger>

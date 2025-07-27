@@ -55,7 +55,7 @@ const CustomerHeaderActions = () => {
             )}
           </Button>
         </SheetTrigger>
-        <CartSheetContent isCartOpen={isCartOpen}/>
+        <CartSheetContent isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen}/>
       </Sheet>
 
       {/* ==== Avatar ==== */}
