@@ -158,7 +158,7 @@ const updateCart = async (req, res) => {
 
 const deleteFromCart = async (req, res) => {
   try {
-    const { userId, productId } = req.body;
+    const { userId, productId } = req.params;
 
     if (!userId || !productId) {
       return res.status(400).json({
@@ -204,4 +204,42 @@ const deleteFromCart = async (req, res) => {
   }
 };
 
-export { addToCart, getCartItems, updateCart, deleteFromCart }
+const deleteAllItems = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing user ID"
+      });
+    }
+
+    const cart = await Cart.findOne({ userId });
+
+    if (!cart) {
+      return res.status(404).json({
+        success: false,
+        message: "Cart not found"
+      });
+    }
+
+    cart.items = [];
+    await cart.save();
+
+    res.status(200).json({
+      success: true,
+      message: "All items removed from cart",
+      data: []
+    });
+
+  } catch (error) {
+    console.error("Error clearing cart:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to remove all items from cart"
+    });
+  }
+};
+
+export { addToCart, getCartItems, updateCart, deleteFromCart, deleteAllItems }
