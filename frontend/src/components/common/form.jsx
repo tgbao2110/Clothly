@@ -33,9 +33,9 @@ const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText})
 
 
     const isFormFilled = () => {
-      return Object.values(formData)
-        .map((v) => v !== "")
-        .every((v) => v);
+        return formControls
+        .filter((control) => !control.optional)
+        .every((control) => formData[control.name] !== "");
     };
 
     const rederInputsByComponentType = (control) => {
@@ -55,6 +55,7 @@ const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText})
                     min={control.min}
                     max={control.max}
                     step={control.isInteger ? 1 : 0.1}
+                    pattern={control.pattern}
                     onChange={(e) => handleInputChange(e, control)}
                   />
                 );
