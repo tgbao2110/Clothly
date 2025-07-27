@@ -5,7 +5,7 @@ import { Label } from "../ui/label"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 
-const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText}) => {
+const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText, hasCancel, onCancel}) => {
 
     const handleInputChange = (e, control) => {
         let newValue = e.target.value;
@@ -30,7 +30,6 @@ const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText})
         state.adminBanners.isLoading
       )
     );
-
 
     const isFormFilled = () => {
         return formControls
@@ -107,7 +106,7 @@ const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText})
     }
 
   return (
-    <form onSubmit={onSubmit}>
+    <form>
         {/* ==== Form Content ==== */}
         <div className="flex flex-col gap-3">
             {
@@ -125,9 +124,16 @@ const CommonForm = ({formControls, formData, setFormData, onSubmit, buttonText})
         </div>
         
         {/* ===== Button ===== */}
-        <Button disabled={!isFormFilled() || isLoading} type='submit' className="mt-5" >
-            {buttonText || 'Submit'}
-        </Button>
+        <div className="flex flex-row gap-1 mt-5">
+            <Button disabled={!isFormFilled() || isLoading} onClick ={onSubmit}>
+                {buttonText || 'Submit'}
+            </Button>
+            {hasCancel && 
+                <Button variant="outline" onClick={onCancel}>
+                    {'Cancel'}
+                </Button>
+            }
+        </div>
     </form>
   )
 }

@@ -37,6 +37,7 @@ const getAllAddresses = createAsyncThunk('/address/get-all',
 // PUT updateAddress thunk
 const updateAddress = createAsyncThunk('/address/update',
   async ({ userId, addressId, formData }, thunkAPI) => {
+    console.log('Request '+ `/address/${userId}/${addressId}`)
       try {
           const res = await api.put(`/address/${userId}/${addressId}`,
             formData, {
