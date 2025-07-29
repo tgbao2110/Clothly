@@ -1,6 +1,88 @@
+import OrderStatusTag from "@/components/common/order-status-tag";
+import UserInfo from "@/components/common/user-info";
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { getAllOrders } from "@/store/order-slice";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { toast } from "sonner";
+
 const AdminOrders = () => {
+  const dispatch = useDispatch();
+  const [orders, setOrders] = useState([]);
+  useEffect(() => {
+    dispatch(getAllOrders())
+    .then(action => {
+      if(action?.payload?.success)
+        setOrders(action?.payload?.data);
+      else
+        toast.error(action?.payload?.message);
+    })
+  },[])
+
+  const handleStatusChange = (orderId, status) => {
+    console.log("Changed status of order ", orderId, " to ", status);
+  }
   return (
-    <div>AdminOrders</div>
+    <div className="w-full mx-auto">
+      <Table className="2xl:min-w-[1200px] xl:min-w-[1000px] lg:min-w-[800px]">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="hidden sm:table-cell">No</TableHead>
+            <TableHead>User</TableHead>
+            <TableHead className="hidden md:table-cell">Address</TableHead>
+            <TableHead className="hidden md:table-cell">Products</TableHead>
+            <TableHead className="hidden lg:table-cell">Total Price</TableHead>
+            <TableHead className="hidden md:table-cell">Date</TableHead>
+            <TableHead>Status</TableHead>
+          </TableRow>
+        </TableHeader>
+
+        <TableBody>
+          {
+            orders.map((order, i) => (
+              <TableRow key={order._id}>
+                <TableCell className="hidden sm:table-cell">
+                  {i+1}
+                </TableCell>
+                {/* ---------------- */}
+                <TableCell>
+                  <UserInfo user={order.user}/>
+                </TableCell>
+                {/* ---------------- */}
+                <TableCell className="hidden md:table-cell">
+                  {order.address.address}
+                </TableCell>
+                {/* ---------------- */}
+                <TableCell className="hidden md:table-cell">
+                  {order.items.length}
+                </TableCell>
+                {/* ---------------- */}
+                <TableCell className="hidden lg:table-cell">
+                  $ {order.totalPrice.toFixed(2)}
+                </TableCell>
+                {/* ---------------- */}
+                <TableCell className="hidden md:table-cell">
+                  {order.createdAt.split("T")[0].split("-").reverse().join("-")}
+                </TableCell>
+                {/* ---------------- */}
+                <TableCell>
+                  <OrderStatusTag 
+                    id={order._id}
+                    status={order.status}
+                    onChange={handleStatusChange}
+                  />
+                </TableCell>
+                {/* ---------------- */}
+                <TableCell className="text-right">
+                  <Button className="hover:underline" variant="link">{'Details >'}</Button>
+                </TableCell>
+              </TableRow>
+            ))
+          }
+        </TableBody>
+      </Table>
+    </div>
   )
 }
 export default AdminOrders
