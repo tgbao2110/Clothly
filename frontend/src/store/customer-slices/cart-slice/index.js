@@ -4,7 +4,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 const initialState = {
   isLoading: false,
   items: JSON.parse(localStorage.getItem("cartItems")) || [],
-  itemsCount: parseInt(localStorage.getItem("itemsCount")) || 0
+  itemsCount: parseInt(localStorage.getItem("itemsCount")) || 0,
+  needsUpdate: false
 }
 
 const saveStateToStorage = state => {
@@ -72,7 +73,12 @@ const deleteAllItems = createAsyncThunk('/cart/delete-all',
 const CartSlice = createSlice({
     name: 'cart',
     initialState,
-    reducers:{},
+    reducers: {
+        setNeedsUpdate: (state, action) => {
+            console.log("SET NEEDS UPDATE:", action.payload);
+            state.needsUpdate = action.payload;
+        }
+    },
     extraReducers: (builder => {
         // addToCart states
         builder.addCase(addToCart.pending, state => {
@@ -122,4 +128,5 @@ const CartSlice = createSlice({
 });
 
 export { addToCart, getCartItems, updateCart, deleteAllItems }
+export const { setNeedsUpdate } = CartSlice.actions;
 export default CartSlice.reducer

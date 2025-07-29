@@ -18,24 +18,38 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { logoutUser } from "@/store/auth-slice"
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import CartSheetContent from "../cart/cart";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getCartItems } from "@/store/customer-slices/cart-slice";
 
 const CustomerHeaderActions = () => {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const {isAuthenticated, user} = useSelector(state => state.auth);
-    const cartCount = useSelector(state => state.cart.itemsCount);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {isAuthenticated, user} = useSelector(state => state.auth);
+  const cartCount = useSelector(state => state.cart.itemsCount);
 
-    const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
-    const handleLogout = () => {
-        dispatch(logoutUser()).then(action => {
-            if(action?.payload?.success)
-                toast.success(action?.payload?.message);
-            else
-                toast.error(action?.payload?.message);
-        })
+  const handleLogout = () => {
+      dispatch(logoutUser()).then(action => {
+          if(action?.payload?.success)
+              toast.success(action?.payload?.message);
+          else
+              toast.error(action?.payload?.message);
+      })
+  }
+
+  const userId = useSelector(state => state.auth.user.id);
+  const needsUpdate = useSelector(state => state.cart.needsUpdate);
+  console.log(needsUpdate);
+  //
+  // Handle Refreshing
+  useEffect(() => {
+    if(needsUpdate) {
+      dispatch(getCartItems(userId));
+      setIsCartOpen(true);
     }
+  },[needsUpdate]);
+
   return (
     <div className="flex flex-row items-center gap-3">
       {/* ==== Cart ==== */}

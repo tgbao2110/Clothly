@@ -8,7 +8,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../../ui/button";
 import CartItem from "./cart-item";
-import { deleteAllItems, updateCart } from "@/store/customer-slices/cart-slice";
+import { deleteAllItems, setNeedsUpdate, updateCart } from "@/store/customer-slices/cart-slice";
 import { useNavigate } from "react-router-dom";
 
 const CartSheetContent = ({isCartOpen, setIsCartOpen}) => {
@@ -16,6 +16,7 @@ const CartSheetContent = ({isCartOpen, setIsCartOpen}) => {
   const navigate  = useNavigate();
   //
   const userId = useSelector(state => state.auth.user.id);
+  const needsUpdate = useSelector(state => state.cart.needsUpdate);
   const currentItems = useSelector(state => state.cart.items); // Global state
   const [items, setItems] = useState(currentItems); // Updated state
   useEffect(() => {
@@ -50,6 +51,7 @@ const CartSheetContent = ({isCartOpen, setIsCartOpen}) => {
     if (!isCartOpen && items.length <= 0) {
       dispatch(deleteAllItems(userId))
     }
+    dispatch(setNeedsUpdate(false));
   }, [isCartOpen])
   //
   // Total Price
@@ -59,8 +61,11 @@ const CartSheetContent = ({isCartOpen, setIsCartOpen}) => {
   //
   // Handle Checkout
   const handleCheckout = () => {
-    navigate(`/checkout`);
-    setIsCartOpen(false);
+    dispatch(updateCart({userId, items}))
+    .then(() => {
+      navigate(`/checkout`);
+      setIsCartOpen(false);
+    })
   };
   
   return (

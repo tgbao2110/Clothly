@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -8,15 +8,22 @@ import CartItem from "@/components/customer-view/cart/cart-item";
 import AddressCard from "@/components/customer-view/account/adressCard";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { deleteAllItems } from "@/store/customer-slices/cart-slice";
+import { deleteAllItems, getCartItems, setNeedsUpdate } from "@/store/customer-slices/cart-slice";
+import { createOrder } from "@/store/order-slice";
 
 const Checkout = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const cartItems = useSelector((state) => state.cart.items);
+  const globalCartItems = useSelector(state => state.cart.items);
+  const [cartItems, setCartItems] = useState(globalCartItems);
+  
   const addresses = useSelector((state) => state.address.addresses);
   const userId = useSelector((state) => state.auth.user.id)
+
+  useEffect(() => {
+    setCartItems(globalCartItems);
+  }, [globalCartItems]);
 
   const [selectedAddress, setSelectedAddress] = useState(addresses[0] || null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -39,9 +46,33 @@ const Checkout = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(deleteAllItems(userId))
-    .then(action => console.log(action.payload))
-    toast.success('Order placed')
+    const order = {
+      userId,
+      addressId: selectedAddress._id,
+      items: cartItems.map(item => ({
+        product: item.product._id,
+        qty: item.qty
+      })),
+      totalPrice
+    };
+
+    console.log(order);
+    dispatch(createOrder(order))
+    .then(action => {
+      console.log(action.payload);
+      if (action.payload?.success) {
+        toast.success(action.payload?.message);
+        dispatch(deleteAllItems(userId));
+        navigate("/account");
+      }
+      else {
+        toast.error(action.payload?.message);
+        if(action.payload?.action === "REFRESH_CART") {
+          console.log("REFRESH_CART");
+          dispatch(setNeedsUpdate(true));
+        }
+      }
+    })
   }
 
   return (
@@ -56,7 +87,7 @@ const Checkout = () => {
         <div className="space-y-3">
           <div className="space-y-4">
             {cartItems.map((item, i) => (
-              <CartItem key={i} item={item} readOnly />
+              <CartItem key={item.product._id + '-' + item.qty} item={item} readOnly />
             ))}
           </div>
           <div className="flex justify-between font-bold text-lg md:border-t pt-4">
