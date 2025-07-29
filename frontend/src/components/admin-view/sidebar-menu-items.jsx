@@ -23,7 +23,7 @@ const AdminSidebarMenuItems = ({setOpen}) => {
                   ${isActive && "text-primary"}
                 `}
               >
-                {item.icon} 
+                <item.Icon size={18}/>
                 {item.label}
               </li>
             );
