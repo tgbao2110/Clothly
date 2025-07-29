@@ -1,4 +1,4 @@
-import OrderDetails from "@/components/admin-view/order-details";
+import OrderDetails from "@/components/common/order-details";
 import OrderStatusTag from "@/components/common/order-status-tag";
 import UserInfo from "@/components/common/user-info";
 import { Button } from "@/components/ui/button";
@@ -54,7 +54,7 @@ const AdminOrders = () => {
                 </TableCell>
                 {/* ---------------- */}
                 <TableCell>
-                  <UserInfo user={order.user}/>
+                  <UserInfo user={order.user} hideAvatar/>
                 </TableCell>
                 {/* ---------------- */}
                 <TableCell className="hidden md:table-cell">
@@ -74,10 +74,8 @@ const AdminOrders = () => {
                 </TableCell>
                 {/* ---------------- */}
                 <TableCell>
-                  <OrderStatusTag 
-                    id={order._id}
+                  <OrderStatusTag
                     status={order.status}
-                    onChange={handleStatusChange}
                   />
                 </TableCell>
                 {/* ---------------- */}
@@ -102,6 +100,7 @@ const AdminOrders = () => {
         isOpen={isSheetOpen}
         setIsOpen={setIsSheetOpen}
         order={currentOrder}
+        onStatusChange={handleStatusChange}
       />
 
     </div>
