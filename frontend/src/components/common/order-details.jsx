@@ -1,9 +1,11 @@
-import UserInfo from "./user-info"
-import AddressCard from "../customer-view/account/adressCard"
-import CartItem from "../customer-view/cart/cart-item"
 import { Separator } from "../ui/separator"
 import { Sheet, SheetHeader, SheetContent, SheetDescription, SheetTitle } from "../ui/sheet"
+
+import UserInfo from "./user-info"
+import AddressCard from "../customer-view/account/adressCard"
 import OrderStatusSelect from "./order-status-select"
+import OrderStatusTag from "./order-status-tag"
+import OrderItem from "./order-item"
 
 const OrderDetails = ({isOpen, setIsOpen, order, onStatusChange}) => {
   if (!order) return null;
@@ -25,12 +27,24 @@ const OrderDetails = ({isOpen, setIsOpen, order, onStatusChange}) => {
           <SheetDescription></SheetDescription>
         </SheetHeader>
         <div className='flex flex-col px-4 gap-5'>
-          <div className="flex flex-row items-center gap-3">
-            <h2 className="text-lg font-bold">Status:</h2>
-            <OrderStatusSelect id={id} status={status} onChange={onStatusChange} />
-          </div>
-          <Separator/>
-          <UserInfo user={user} />
+          {
+            onStatusChange &&
+            <>
+            <div className="flex flex-row items-center gap-3">
+              <h2 className="text-lg font-bold">Status:</h2>
+              <OrderStatusSelect id={id} status={status} onChange={onStatusChange} />
+            </div>
+            <Separator/>
+            </>
+          }
+          {
+            onStatusChange ?
+            <UserInfo user={user} /> :
+            <div className="flex flex-row items-center gap-2">
+              <h2 className="text-md font-semibold">Status:</h2>
+              <OrderStatusTag status={status} />
+            </div>
+          }
           <AddressCard address={address} />
           <div className="text-sm text-muted-foreground italic">
             <p>
@@ -45,7 +59,7 @@ const OrderDetails = ({isOpen, setIsOpen, order, onStatusChange}) => {
             <div>
               {
                 items.map((item,i) => (
-                  <CartItem key={i} item={item} readOnly />
+                  <OrderItem key={i} item={item} readOnly />
                 ))
               }
             </div>

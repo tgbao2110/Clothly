@@ -18,7 +18,7 @@ const Account = () => {
   }, []);
 
   return (
-    <div className="flex flex-col p-16 gap-8">
+    <div className="flex flex-col py-12 px-4 sm:px-8 md:px-16 gap-8">
       {/* ==== Avt & Name ==== */}
       <UserInfo user={user}/>
 
