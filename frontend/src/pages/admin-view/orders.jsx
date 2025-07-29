@@ -1,3 +1,4 @@
+import OrderDetails from "@/components/admin-view/order-details";
 import OrderStatusTag from "@/components/common/order-status-tag";
 import UserInfo from "@/components/common/user-info";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,10 @@ import { toast } from "sonner";
 const AdminOrders = () => {
   const dispatch = useDispatch();
   const [orders, setOrders] = useState([]);
+  const [currentOrder, setCurrentOrder] = useState(null);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+  // Fetch orders
   useEffect(() => {
     dispatch(getAllOrders())
     .then(action => {
@@ -20,9 +25,11 @@ const AdminOrders = () => {
     })
   },[])
 
+  // Handle status change
   const handleStatusChange = (orderId, status) => {
     console.log("Changed status of order ", orderId, " to ", status);
   }
+
   return (
     <div className="w-full mx-auto">
       <Table className="2xl:min-w-[1200px] xl:min-w-[1000px] lg:min-w-[800px]">
@@ -75,13 +82,28 @@ const AdminOrders = () => {
                 </TableCell>
                 {/* ---------------- */}
                 <TableCell className="text-right">
-                  <Button className="hover:underline" variant="link">{'Details >'}</Button>
+                  <Button variant="link"
+                    className="hover:underline"
+                    onClick={() => {
+                      setCurrentOrder(order);
+                      setIsSheetOpen(true);
+                    }}
+                  >
+                    {'Details >'}
+                  </Button>
                 </TableCell>
               </TableRow>
             ))
           }
         </TableBody>
       </Table>
+      
+      <OrderDetails 
+        isOpen={isSheetOpen}
+        setIsOpen={setIsSheetOpen}
+        order={currentOrder}
+      />
+
     </div>
   )
 }
