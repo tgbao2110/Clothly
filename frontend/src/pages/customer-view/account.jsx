@@ -1,6 +1,4 @@
 import { useSelector } from "react-redux";
-
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import AccountAddress from "@/components/customer-view/account/addresses";
@@ -8,6 +6,7 @@ import AccountOrders from "@/components/customer-view/account/orders";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import scrollTo from "@/lib/scroll";
+import UserInfo from "@/components/common/user-info";
 
 const Account = () => {
   const user = useSelector(state => state.auth.user);
@@ -21,21 +20,7 @@ const Account = () => {
   return (
     <div className="flex flex-col p-16 gap-8">
       {/* ==== Avt & Name ==== */}
-      <div className="flex flex-row items-center gap-1.5">
-        <Avatar className='size-10'>
-          <AvatarFallback className="bg-black text-white font-medium">
-            {user?.userName[0]?.toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
-        <div className="flex flex-col justify-center">
-          <h2 className="text-md font-bold">
-           {user?.userName}
-          </h2>
-          <p className="text-muted-foreground text-xs">
-            {user?.email}
-          </p>
-        </div>
-      </div>
+      <UserInfo user={user}/>
 
       {/* ==== Orders & Addresses ==== */}
       <Tabs defaultValue={ defaultTab || 'orders' }>
