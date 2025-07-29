@@ -141,3 +141,5 @@ vite.config.ts.timestamp-*
 # Notes and tests
 Notes.md
 test_data/
+backend/controllers/order/order-controller.js
+backend/models/Order.js

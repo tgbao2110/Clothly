@@ -47,6 +47,19 @@
     }
   )
 
+  // PUT setStatus thunk
+  const setOrderStatus = createAsyncThunk('/order/set-status',
+    async({orderId, status}, thunkAPI) => {
+      console.log('Request '+ `/order/${orderId}/${status}`)
+      try {
+        const res = await api.put(`/order/${orderId}/${status}`);
+        return res.data;
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error.response?.data);
+      }
+    }
+  )
+
   const OrderSlice = createSlice({
     name: "order",
     initialState,
@@ -84,8 +97,21 @@
         }).addCase(getAllOrders.rejected, (state) => {
           state.isLoading = false;
         });
+      builder
+        .addCase(setOrderStatus.pending, (state) => {
+          state.isLoading = true;
+        }).addCase(setOrderStatus.fulfilled, (state, action) => {
+          state.isLoading = false;
+          state.allOrders = state.allOrders.map(order => 
+            order._id === action.payload.data._id ?
+              action.payload.data :
+              order
+          );
+        }).addCase(setOrderStatus.rejected, (state) => {
+          state.isLoading = false;
+        });
     },
   });
 
-  export { createOrder, getOrdersByUser, getAllOrders }
+  export { createOrder, getOrdersByUser, getAllOrders, setOrderStatus }
   export default OrderSlice.reducer

@@ -3,14 +3,14 @@ import OrderStatusTag from "@/components/common/order-status-tag";
 import UserInfo from "@/components/common/user-info";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { getAllOrders } from "@/store/order-slice";
+import { getAllOrders, setOrderStatus } from "@/store/order-slice";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 
 const AdminOrders = () => {
   const dispatch = useDispatch();
-  const [orders, setOrders] = useState([]);
+  const orders = useSelector(state => state.order.allOrders);
   const [currentOrder, setCurrentOrder] = useState(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
@@ -18,16 +18,21 @@ const AdminOrders = () => {
   useEffect(() => {
     dispatch(getAllOrders())
     .then(action => {
-      if(action?.payload?.success)
-        setOrders(action?.payload?.data);
-      else
+      if(!action?.payload?.success)
         toast.error(action?.payload?.message);
     })
   },[])
 
   // Handle status change
   const handleStatusChange = (orderId, status) => {
-    console.log("Changed status of order ", orderId, " to ", status);
+    console.log("handleStatusChange CALLED")
+    dispatch(setOrderStatus({ orderId, status }))
+    .then(action => {
+      if(action?.payload?.success)
+        toast.success(action?.payload?.message);
+      else
+        toast.error(action?.payload?.message);
+    })
   }
 
   return (
