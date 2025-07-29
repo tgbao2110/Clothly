@@ -1,5 +1,6 @@
 import Order from "../../models/Order.js";
 import { Address } from "../../models/Address.js";
+import { Product } from "../../models/Product.js"
 
 // Helper
 const formatOrder = (orderDoc) => {
@@ -33,8 +34,21 @@ const createOrder = async (req, res) => {
       });
     }
     //
+    // Check if items products qty <= in stock
+    for (const item of items) {
+      const product = await Product.findById(item.product);
+      if (!product || product.stock < item.qty) {
+        return res.status(400).json({
+          success: false,
+          action: "REFRESH_CART",
+          message: `Insufficient stock for product(s)`
+        });
+      }
+    }
+    //
     // Create and save order
     const order = new Order({ userId, addressId, items, totalPrice, notes });
+
     await order.save();
     await order.populate("items.product");
     await order.populate("addressId");
