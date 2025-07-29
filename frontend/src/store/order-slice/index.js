@@ -27,7 +27,7 @@
   const getOrdersByUser = createAsyncThunk('/order/get-by-user',
     async (userId, thunkAPI) => {
         try {
-            const res = await api.get(`/order/user/${userId}`);
+            const res = await api.get(`/order/${userId}`);
             return res.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response?.data);
