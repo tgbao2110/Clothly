@@ -53,6 +53,13 @@ const createOrder = async (req, res) => {
     await order.populate("items.product");
     await order.populate("addressId");
     //
+    // Decrease product's stock
+    for (const item of items) {
+      const product = await Product.findById(item.product);
+      product.stock -= item.qty;
+      await product.save();
+    }
+    //
     // Format order
     const resOrder = formatOrder(order);
     //
