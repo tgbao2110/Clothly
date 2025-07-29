@@ -75,7 +75,6 @@ const CartSlice = createSlice({
     initialState,
     reducers: {
         setNeedsUpdate: (state, action) => {
-            console.log("SET NEEDS UPDATE:", action.payload);
             state.needsUpdate = action.payload;
         }
     },

@@ -25,10 +25,11 @@ const CustomerHeaderActions = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {isAuthenticated, user} = useSelector(state => state.auth);
+  const needsUpdate = useSelector(state => state.cart.needsUpdate);
   const cartCount = useSelector(state => state.cart.itemsCount);
-
   const [isCartOpen, setIsCartOpen] = useState(false);
-
+  //
+  // Logout
   const handleLogout = () => {
       dispatch(logoutUser()).then(action => {
           if(action?.payload?.success)
@@ -37,15 +38,11 @@ const CustomerHeaderActions = () => {
               toast.error(action?.payload?.message);
       })
   }
-
-  const userId = useSelector(state => state.auth.user.id);
-  const needsUpdate = useSelector(state => state.cart.needsUpdate);
-  console.log(needsUpdate);
   //
   // Handle Refreshing
   useEffect(() => {
     if(needsUpdate) {
-      dispatch(getCartItems(userId));
+      dispatch(getCartItems(user.id));
       setIsCartOpen(true);
     }
   },[needsUpdate]);
