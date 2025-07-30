@@ -37,7 +37,7 @@ const AdminProducts = () => {
   const [formData, setFormData] = useState(initState);
   const [currentId, setCurrentId] = useState(null);
 
-
+  // Create
   const handleCreate = async e => {
     e.preventDefault();
     
@@ -77,7 +77,7 @@ const AdminProducts = () => {
     })
   }
 
-  // Dispatch POST updateProdcut
+  // Update
   const handleUpdate = async e => {
     e.preventDefault();
     
@@ -109,30 +109,14 @@ const AdminProducts = () => {
     })
   }
 
-  // Dispatch DELETE deleteProdcut
-  const handleDelete = async e => {
-    e.preventDefault();
-
-    dispatch(deleteProduct(currentId))
-      .then(action => {
-        console.log(action?.payload);
-        if(action?.payload?.success)
-        {
-          setIsConfirmDialogOpen(false);
-          toast.success(action?.payload?.message);
-        }
-        else
-          toast.error(action?.payload?.message)
-      })
-  }
+  // Mark as Featured
   
-
-  // Dispatch GET getAllProducts
+  // Get All
   useEffect(() => {
     dispatch(getAllProducts())
   }, [])
 
-  // Handle close sheet
+  // Close Sheet
   const handleSheetToggle = (isOpen) => {
   setIsCreateDialogOpen(isOpen);
 
@@ -143,7 +127,7 @@ const AdminProducts = () => {
     setFormData(initState);
     setCurrentId(null);
   }
-};
+  };
 
   return (
     <div className="w-full">
