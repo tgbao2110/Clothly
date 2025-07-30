@@ -109,6 +109,23 @@ const AdminProducts = () => {
     })
   }
 
+  // Delete
+  const handleDelete = async e => {
+    e.preventDefault();
+
+    dispatch(deleteProduct(currentId))
+      .then(action => {
+        console.log(action?.payload);
+        if(action?.payload?.success)
+        {
+          setIsConfirmDialogOpen(false);
+          toast.success(action?.payload?.message);
+        }
+        else
+          toast.error(action?.payload?.message)
+      })
+  }
+
   // Mark as Featured
   
   // Get All

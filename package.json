@@ -1,0 +1,22 @@
+{
+  "name": "clothly",
+  "version": "1.0.0",
+  "description": "An end-to-end MERN-stack e-commerce site with role-based access (admin & customer), JWT auth, and optimized state management.\r This project delivers a fully functional online clothing store.  \r Users authenticate via JWT tokens stored in HTTP-only cookies (1-hour expiry).  \r Admins manage products, banners, and orders.  \r Customers browse, filter, add to cart, checkout, and manage their profile.",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "npm run start --prefix backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tgbao2110/Clothly.git"
+  },
+  "keywords": [],
+  "author": "Gia Bao",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/tgbao2110/Clothly/issues"
+  },
+  "homepage": "https://github.com/tgbao2110/Clothly#readme"
+}
