@@ -30,7 +30,7 @@ const HomeFeatured = () => {
         Featured Products
       </h1>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
-        {products.map((product) => (
+        {products.slice(0,4).map((product) => (
           <CustomerProductTile key={product._id} product={product} />
         ))}
       </div>
